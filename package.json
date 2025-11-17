@@ -14,7 +14,11 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
-		"lint": "oxlint --type-aware"
+		"lint": "oxlint --type-aware",
+		"format": "oxfmt",
+		"qa:format": "oxfmt --check .",
+		"qa:lint": "oxlint --type-aware",
+		"qa": "pnpm run qa:format && pnpm run qa:lint"
 	},
 	"devDependencies": {
 		"@libsql/client": "^0.15.15",
@@ -26,6 +30,7 @@
 		"@types/node": "^22",
 		"drizzle-kit": "^0.31.5",
 		"drizzle-orm": "^0.44.6",
+		"oxfmt": "^0.13.0",
 		"oxlint": "^1.28.0",
 		"oxlint-tsgolint": "^0.6.0",
 		"svelte": "^5.41.0",
