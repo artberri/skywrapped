@@ -1,5 +1,6 @@
 import { PORT, PRIVATE_KEYS } from "$env/static/private";
 import { PUBLIC_BASE_URL } from "$env/static/public";
+import { AtprotoHandleResolverNode } from "@atproto-labs/handle-resolver-node";
 import {
   atprotoLoopbackClientMetadata,
   JoseKey,
@@ -8,11 +9,11 @@ import {
   type OAuthClientMetadataInput,
 } from "@atproto/oauth-client-node";
 import assert from "node:assert";
-import { getDb, type Database } from "../db";
+import { type Database } from "../db";
 import { validJsonWebKeys } from "../jwk";
 import { SessionStore, StateStore } from "./storage";
 
-async function createOAuthClient(db: Database) {
+export async function createOAuthClient(db: Database) {
   // Confidential client require a keyset accessible on the internet. Non
   // internet clients (e.g. development) cannot expose a keyset on the internet
   // so they can't be private..
@@ -56,20 +57,17 @@ async function createOAuthClient(db: Database) {
         ])}`,
       );
 
+  // Create an explicit handle resolver with fallback nameservers for DNS resolution
+  // This is required for resolving ATProto handles (e.g., Bluesky handles) to DIDs
+  const handleResolver = new AtprotoHandleResolverNode({
+    fallbackNameservers: ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4"],
+  });
+
   return new NodeOAuthClient({
     keyset,
     clientMetadata,
     stateStore: new StateStore(db),
     sessionStore: new SessionStore(db),
+    handleResolver,
   });
 }
-
-let oauthClient: NodeOAuthClient | undefined = undefined;
-
-export const getOAuthClient = async (): Promise<NodeOAuthClient> => {
-  if (!oauthClient) {
-    oauthClient = await createOAuthClient(getDb());
-  }
-
-  return oauthClient;
-};

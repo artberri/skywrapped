@@ -19,12 +19,6 @@ const client = createClient({
 
 export type Database = ReturnType<typeof drizzle>;
 
-let db: Database | undefined = undefined;
-
-export const getDb = (): Database => {
-  if (!db) {
-    db = drizzle(client, { schema });
-  }
-
-  return db;
+export const createDb = (): Database => {
+  return drizzle(client, { schema });
 };

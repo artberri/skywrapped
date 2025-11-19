@@ -1,39 +1,47 @@
-import { getOAuthClient } from "$lib/server/auth/client";
 import { MAX_AGE } from "$lib/server/constants";
-import { ifString } from "$lib/utils";
-import { redirect } from "@sveltejs/kit";
+import { ensureError, ifString } from "$lib/utils";
+import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = ({ setHeaders }) => {
-  setHeaders({ "cache-control": `max-age=${MAX_AGE}, public` });
+export const load: PageServerLoad = ({ setHeaders, request }) => {
+  // Set different cache-control headers based on request method
+  if (request.method === "GET") {
+    setHeaders({ "cache-control": `max-age=${MAX_AGE}, public` });
+  } else {
+    // For POST requests (and any other methods), don't cache
+    setHeaders({ "cache-control": "no-store" });
+  }
 };
 
 export const actions: Actions = {
-  default: async ({ setHeaders, request }) => {
-    // Never store this route
-    setHeaders({ "cache-control": "no-store" });
-
+  default: async ({ request, locals }) => {
     const data = await request.formData();
     const handle = data.get("handle");
 
-    // Initiate the OAuth flow
-    try {
-      // Validate input: can be a handle, a DID or a service URL (PDS).
-      if (!ifString(handle)) {
-        throw new Error("Invalid input");
-      }
-
-      // Initiate the OAuth flow
-      const oauthClient = await getOAuthClient();
-      const url = await oauthClient.authorize(handle);
-
-      redirect(302, url.toString());
-    } catch (err) {
-      console.error({ err }, "oauth authorize failed");
-
-      const error = err instanceof Error ? err.message : "unexpected error";
-
-      return { error };
+    // Validate input: can be a handle, a DID or a service URL (PDS).
+    if (!ifString(handle)) {
+      throw new Error("Invalid input");
     }
+
+    if (!handle) {
+      return fail(400, { error: "The handle field is required" });
+    }
+
+    // Initiate the OAuth flow
+    let url: URL;
+    try {
+      // Initiate the OAuth flow
+      url = await locals.ctx.oauthClient.authorize(handle);
+    } catch (err) {
+      const error = ensureError(err).message;
+      const errorMessage =
+        err instanceof Error ? err.message : "Unexpected error";
+      locals.ctx.logger.warn({ error }, "OAuth authorize failed");
+
+      return fail(400, { error: errorMessage });
+    }
+
+    // Redirect to the OAuth authorization URL
+    redirect(302, url.toString());
   },
 };

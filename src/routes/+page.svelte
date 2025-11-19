@@ -10,6 +10,9 @@
 	import Label from '$lib/components/ui/Lalbel.svelte';
 	import { Bookmark, BookmarkCheck, Sparkles } from '@lucide/svelte';
 	import '../app.css';
+	import type { PageProps } from './$types';
+
+  let { form }: PageProps = $props();
 </script>
 
 <style lang="postcss">
@@ -93,8 +96,8 @@
               <CardContent class="px-4 md:px-6 pb-6">
                 <div class="w-full">
                   <div class="grid gap-3 md:gap-4">
-                  <div class="grid gap-2">
-                    <Label for="handle" class="text-sm">Bluesky/AT Protocol handle</Label>
+                    <div class="grid gap-2">
+                      <Label for="handle" class="text-sm">Bluesky/AT Protocol handle</Label>
                       <Input
                         id="handle"
                         name="handle"
@@ -102,6 +105,12 @@
                         placeholder="@username.bsky.social"
                         class="h-11"
                       />
+                        {#if form?.error}
+                          <p class="text-sm text-destructive leading-5">
+                            {form.error}
+                          </p>
+                        {/if}
+
                     </div>
                     <Button type="submit" class="w-full min-h-[48px] text-sm md:text-base" size="lg" variant="gradient">
                       Log In
@@ -137,16 +146,16 @@
           </span>
         </div>
         <div class="flex flex-wrap justify-center gap-4 md:gap-6 text-sm">
-          <a href="#" class="text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center">
+          <a href="/" class="text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center">
             About
           </a>
-          <a href="#" class="text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center">
+          <a href="/" class="text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center">
             Privacy
           </a>
-          <a href="#" class="text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center">
+          <a href="/" class="text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center">
             Terms
           </a>
-          <a href="#" class="text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center">
+          <a href="/" class="text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center">
             Contact
           </a>
         </div>

@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "vite dev | pino-pretty",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -15,17 +15,21 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
+		"db:drop": "drizzle-kit drop",
 		"lint": "oxlint --type-aware",
 		"format": "oxfmt",
 		"qa:format": "oxfmt --check .",
 		"qa:lint": "oxlint --type-aware",
-		"qa": "pnpm run \"/^qa:.*/\"",
+		"qa": "pnpm run --stream \"/^qa:.*/\"",
 		"local:db": "pnpm run db:start",
 		"local:server": "pnpm run dev",
-		"local": "pnpm run \"/^local:.*/\""
+		"local": "pnpm run --stream \"/^local:.*/\""
 	},
 	"devDependencies": {
+		"@atproto-labs/handle-resolver-node": "^0.1.21",
+		"@atproto/oauth-client-node": "^0.3.10",
 		"@libsql/client": "^0.15.15",
+		"@lucide/svelte": "^0.554.0",
 		"@sveltejs/adapter-cloudflare": "^7.2.4",
 		"@sveltejs/kit": "^2.47.1",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
@@ -39,16 +43,16 @@
 		"oxfmt": "^0.13.0",
 		"oxlint": "^1.28.0",
 		"oxlint-tsgolint": "^0.6.0",
+		"pino": "^10.1.0",
+		"pino-pretty": "^13.1.2",
 		"svelte": "^5.41.0",
 		"svelte-check": "^4.3.3",
 		"tailwind-merge": "^3.4.0",
 		"tailwindcss": "^4.1.14",
 		"typescript": "^5.9.3",
-		"vite": "^7.1.10"
+		"vite": "^7.1.10",
+		"zod": "^3.25.76"
 	},
 	"dependencies": {
-		"@atproto/oauth-client-node": "^0.3.10",
-		"@lucide/svelte": "^0.554.0",
-		"zod": "^3.25.76"
 	}
 }
