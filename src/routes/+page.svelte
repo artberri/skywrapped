@@ -24,7 +24,7 @@
     <div
       class="absolute inset-0 opacity-10 bg-cover bg-center hero-bg"
     ></div>
-    <div class="relative container mx-auto px-4 py-12 md:py-20 lg:py-24">
+    <div class="relative container mx-auto py-12 md:py-20 lg:py-24">
       <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
         <div class="grid gap-4 md:gap-6 text-center md:text-left">
           <div class="flex items-center justify-center md:justify-start gap-2 md:gap-3 mb-4 md:mb-8">
@@ -81,58 +81,54 @@
           </div>
         </div>
 
-        <div class="flex justify-center md:justify-end mt-8 md:mt-0">
-          <Card class="w-full max-w-md shadow-large border-border/50 backdrop-blur">
-            <CardHeader class="grid gap-1 px-4 md:px-6 pt-6">
-              <CardTitle class="text-xl md:text-2xl text-center">Welcome to ReadStack</CardTitle>
-              <CardDescription class="text-center text-sm">
-                Sign in to access your reading list
-              </CardDescription>
-            </CardHeader>
-            <CardContent class="px-4 md:px-6 pb-6">
-              <div class="w-full">
-                <div class="grid gap-3 md:gap-4">
-                <div class="grid gap-2">
-                    <Label for="login-email" class="text-sm">Email or Handle</Label>
-                    <Input
-                      id="login-email"
-                      type="text"
-                      placeholder="you@example.com or @handle"
-                      class="transition-all focus:shadow-soft h-11 text-base"
-                    />
-                  </div>
+        <form method="POST">
+          <div class="flex justify-center md:justify-end mt-8 md:mt-0">
+            <Card class="w-full max-w-md shadow-large border-border/50 backdrop-blur">
+              <CardHeader class="grid gap-1 md:px-6 pt-6">
+                <CardTitle class="text-xl md:text-2xl text-center">Welcome to ReadStack</CardTitle>
+                <CardDescription class="text-center text-sm">
+                  Sign in with your Bluesky or AT Protocol account
+                </CardDescription>
+              </CardHeader>
+              <CardContent class="px-4 md:px-6 pb-6">
+                <div class="w-full">
+                  <div class="grid gap-3 md:gap-4">
                   <div class="grid gap-2">
-                    <Label for="login-password" class="text-sm">Password</Label>
-                    <Input
-                      id="login-password"
-                      type="password"
-                      placeholder="Enter your password"
-                      class="transition-all focus:shadow-soft h-11 text-base"
-                    />
+                    <Label for="handle" class="text-sm">Bluesky/AT Protocol handle</Label>
+                      <Input
+                        id="handle"
+                        name="handle"
+                        type="text"
+                        placeholder="@username.bsky.social"
+                        class="h-11"
+                      />
+                    </div>
+                    <Button type="submit" class="w-full min-h-[48px] text-sm md:text-base" size="lg" variant="gradient">
+                      Log In
+                    </Button>
+                    <p class="text-xs md:text-sm text-center text-muted-foreground pt-2">
+                      Don't have an account in the Atmosphere?
+                      <a
+                        href="https://bsky.app"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-primary hover:text-primary/80 transition-colors underline"
+                      >
+                        Sign up for Bluesky
+                      </a> to create one now!
+                    </p>
                   </div>
-                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm">
-                    <label class="flex items-center gap-2 cursor-pointer min-h-[44px] sm:min-h-0">
-                      <input type="checkbox" class="rounded border-border w-4 h-4" />
-                      <span class="text-muted-foreground">Remember me</span>
-                    </label>
-                    <a href="#" class="text-primary hover:underline min-h-[44px] sm:min-h-0 flex items-center">
-                      Forgot password?
-                    </a>
-                  </div>
-                  <Button variant="gradient" class="w-full min-h-[48px]" size="lg">
-                    Log In
-                  </Button>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              </CardContent>
+            </Card>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 
   <footer class="border-t border-border/50 py-6 md:py-8 mt-12 md:mt-16">
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto">
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-2">
           <img src={logo} alt="Logo" class="w-7 h-7 md:w-8 md:h-8" />
