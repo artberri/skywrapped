@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev | pino-pretty",
+		"dev": "vite dev | pino-pretty --colorize",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -27,6 +27,7 @@
 	},
 	"devDependencies": {
 		"@atproto-labs/handle-resolver-node": "^0.1.21",
+		"@atproto/api": "^0.18.1",
 		"@atproto/oauth-client-node": "^0.3.10",
 		"@libsql/client": "^0.15.15",
 		"@lucide/svelte": "^0.554.0",
@@ -40,6 +41,7 @@
 		"clsx": "^2.1.1",
 		"drizzle-kit": "^0.31.5",
 		"drizzle-orm": "^0.44.6",
+		"iron-session": "^8.0.4",
 		"oxfmt": "^0.13.0",
 		"oxlint": "^1.28.0",
 		"oxlint-tsgolint": "^0.6.0",
@@ -52,7 +54,5 @@
 		"typescript": "^5.9.3",
 		"vite": "^7.1.10",
 		"zod": "^3.25.76"
-	},
-	"dependencies": {
 	}
 }

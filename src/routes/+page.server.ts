@@ -15,6 +15,7 @@ export const load: PageServerLoad = ({ setHeaders, request }) => {
 
 export const actions: Actions = {
   default: async ({ request, locals }) => {
+    const { ctx } = locals;
     const data = await request.formData();
     const handle = data.get("handle");
 
@@ -31,12 +32,12 @@ export const actions: Actions = {
     let url: URL;
     try {
       // Initiate the OAuth flow
-      url = await locals.ctx.oauthClient.authorize(handle);
+      url = await ctx.oauthClient.authorize(sanitizeHandle(handle));
     } catch (err) {
       const error = ensureError(err).message;
       const errorMessage =
         err instanceof Error ? err.message : "Unexpected error";
-      locals.ctx.logger.warn({ error }, "OAuth authorize failed");
+      ctx.logger.warn({ error }, "OAuth authorize failed");
 
       return fail(400, { error: errorMessage });
     }
@@ -44,4 +45,8 @@ export const actions: Actions = {
     // Redirect to the OAuth authorization URL
     redirect(302, url.toString());
   },
+};
+
+const sanitizeHandle = (handle: string) => {
+  return handle.trim().replace(/^@/, "");
 };

@@ -4,19 +4,16 @@ Prototype
 
 ## Prerequisites
 
-Install **proto** (https://moonrepo.dev/proto) to synchronize languages and tools.
-
-Run `proto install`.
+- Install [turso CLI](https://docs.turso.tech/cli/introduction) to run the database locally.
+- Install [proto](https://moonrepo.dev/proto) to synchronize languages and tools.
+- Run `proto install`.
 
 ## Developing
 
 Once you've created a project and installed dependencies with `pnpm install`, start a development server:
 
 ```sh
-pnpm run dev
-
-# or start the server and open the app in a new browser tab
-pnpm run dev --open
+pnpm run local
 ```
 
 ## Building
