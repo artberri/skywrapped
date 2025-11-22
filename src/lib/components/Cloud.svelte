@@ -1,9 +1,14 @@
 <script lang="ts">
   import { cn } from '$lib/utils';
   let { class: className, size = 'md', style }: {class?: string, size?: 'sm' | 'md' | 'lg', style?: string} = $props();
+  let sizeClasses = {
+    sm: "w-16 h-10",
+    md: "w-24 h-14",
+    lg: "w-32 h-20",
+  };
 </script>
 <svg
-  class={cn("opacity-20", className)}
+  class={cn(sizeClasses[size], "opacity-20", className)}
   viewBox="0 0 200 120"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"

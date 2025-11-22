@@ -1,6 +1,6 @@
 <script lang="ts">
   import { cn } from '$lib/utils';
-  let { class: className, size = 'md' }: {class?: string, size?: 'sm' | 'md' | 'lg'} = $props();
+  let { class: className, size = 'md', style }: {class?: string, size?: 'sm' | 'md' | 'lg', style?: string} = $props();
   const sizeClasses = {
     sm: "w-6 h-6",
     md: "w-10 h-10",
@@ -13,6 +13,7 @@
   viewBox="0 0 100 100"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
+  style={style}
 >
   <path
     d="M30 50C30 50 15 35 20 20C25 5 40 15 45 30L50 50"

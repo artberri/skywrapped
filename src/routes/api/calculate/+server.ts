@@ -1,9 +1,9 @@
 import { calculateWrapped } from "$lib/server/calculateWrapped";
+import { YEAR } from "$lib/server/constants";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 const MIN_STEP_DURATION = 300; // 0.3 seconds in milliseconds
-const YEAR = 2025;
 
 async function ensureMinDuration(startTime: number): Promise<void> {
   const elapsed = Date.now() - startTime;

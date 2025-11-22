@@ -55,6 +55,7 @@
 
               if (parsed.error) {
                 console.error("Calculation error:", parsed.error);
+                goto("/error");
                 return;
               }
 
@@ -71,6 +72,7 @@
       }
     } catch (error) {
       console.error("Error during calculation:", error);
+      goto("/error");
     }
   });
 </script>
