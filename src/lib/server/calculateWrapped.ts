@@ -34,6 +34,7 @@ export const calculateWrapped = async ({
     did: profile.did,
     handle: profile.handle,
     year,
+    displayName: profile.displayName ?? profile.handle,
     current: {
       posts: feed.length,
       following: profile.followsCount ?? 0,

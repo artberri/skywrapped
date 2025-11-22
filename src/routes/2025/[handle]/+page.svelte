@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ProgressBar from "$lib/components/ProgressBar.svelte";
 	import IntroSlide from "$lib/components/slides/IntroSlide.svelte";
+	import OutroSlide from "$lib/components/slides/OutroSlide.svelte";
 	import ProfileOverviewSlide from "$lib/components/slides/ProfileOverviewSlide.svelte";
 	import { cn } from "$lib/utils";
 	import { ChevronLeft, ChevronRight } from '@lucide/svelte';
@@ -13,6 +14,7 @@
   let slides = [
     { id: 1, type: 'intro', gradient: 'sky', component: IntroSlide },
     { id: 2, type: 'profile-overview', gradient: 'dawn', component: ProfileOverviewSlide },
+    { id: 3, type: 'outro', gradient: 'sunset', component: OutroSlide },
   ] as const;
 
   let currentSlide = $state(0);
@@ -29,30 +31,43 @@
   let nextSlide = () => {
     if (currentSlide < slides.length - 1) {
       currentSlide = currentSlide + 1;
+      console.log("nextSlide");
     }
   };
 
-  const prevSlide = () => {
+  let prevSlide = () => {
     if (currentSlide > 0) {
       currentSlide = currentSlide - 1;
+      console.log("prevSlide");
     }
   };
 
-  const handleTouchStart: TouchEventHandler<HTMLDivElement> = (e) => {
+  let handleTouchStart: TouchEventHandler<HTMLDivElement> = (e) => {
     touchStart = e.targetTouches[0].clientX;
+    touchEnd = 0
+    console.log("touchStart", touchStart);
   };
 
-  const handleTouchMove: TouchEventHandler<HTMLDivElement> = (e) => {
+  let handleTouchMove: TouchEventHandler<HTMLDivElement> = (e) => {
     touchEnd = e.targetTouches[0].clientX;
+    console.log("touchEnd", touchEnd);
   };
 
-  const handleTouchEnd = () => {
-    if (touchStart - touchEnd > 75) {
-      nextSlide();
-    }
-    if (touchStart - touchEnd < -75) {
-      prevSlide();
-    }
+  let handleTouchEnd = () => {
+      if (touchStart - touchEnd > 75 && touchStart !== 0 && touchEnd !== 0) {
+        console.log("touchStart - touchEnd", touchStart - touchEnd);
+        console.log("nextSlide on touch end");
+        nextSlide();
+        touchStart = 0;
+        touchEnd = 0;
+      }
+      if (touchStart - touchEnd < -75 && touchStart !== 0 && touchEnd !== 0) {
+        console.log("touchStart - touchEnd", touchStart - touchEnd);
+        console.log("prevSlide on touch end");
+        prevSlide();
+        touchStart = 0;
+        touchEnd = 0;
+      }
   };
 
   let currentSlideData = $derived(slides[currentSlide]);

@@ -30,7 +30,7 @@
 
     <div class="space-y-2 animate-fade-in" style:animation-delay="0.4s">
       <p class="text-2xl md:text-3xl font-semibold text-white">
-        {wrapped.did}
+        {wrapped.displayName}
       </p>
       <p class="text-lg md:text-xl text-white/80">
         @{wrapped.handle}
