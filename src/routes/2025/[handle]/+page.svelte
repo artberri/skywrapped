@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ProgressBar from "$lib/components/ProgressBar.svelte";
+	import BestTimeSlide from "$lib/components/slides/BestTimeSlide.svelte";
 	import IntroSlide from "$lib/components/slides/IntroSlide.svelte";
 	import OutroSlide from "$lib/components/slides/OutroSlide.svelte";
 	import ProfileOverviewSlide from "$lib/components/slides/ProfileOverviewSlide.svelte";
@@ -14,7 +15,8 @@
   let slides = [
     { id: 1, type: 'intro', gradient: 'sky', component: IntroSlide },
     { id: 2, type: 'profile-overview', gradient: 'dawn', component: ProfileOverviewSlide },
-    { id: 3, type: 'outro', gradient: 'sunset', component: OutroSlide },
+    { id: 3, type: 'best-time', gradient: 'sunset', component: BestTimeSlide },
+    { id: 4, type: 'outro', gradient: 'sunset', component: OutroSlide },
   ] as const;
 
   let currentSlide = $state(0);

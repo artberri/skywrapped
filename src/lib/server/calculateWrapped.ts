@@ -5,6 +5,7 @@ import type {
 } from "@atproto/api";
 import type { Wrapped } from "./domain/wrapped";
 import { getSortAtTimestamp } from "./timestampUtils";
+import { isNotNil } from "$lib/utils";
 
 type FeedViewPost = AppBskyFeedDefs.FeedViewPost;
 type ProfileViewDetailed = AppBskyActorDefs.ProfileViewDetailed;
@@ -30,6 +31,8 @@ export const calculateWrapped = async ({
   likes: FeedViewPost[];
   bookmarks: FeedViewPost[];
 }): Promise<Wrapped> => {
+  const bestTime = calculateBestTime(feed);
+
   return {
     did: profile.did,
     handle: profile.handle,
@@ -41,6 +44,7 @@ export const calculateWrapped = async ({
       followers: profile.followersCount ?? 0,
       accountAge: calculateAccountAge(profile.createdAt, profile.indexedAt),
     },
+    bestTime,
   };
 };
 
@@ -67,4 +71,42 @@ const calculateAccountAge = (
 
   // Round to one decimal place
   return Math.max(0, Math.round(ageInYears * 10) / 10);
+};
+
+const calculateBestTime = (
+  feed: FeedViewPost[],
+): { mostActiveDay: number; peakPostingHour: number } => {
+  const postingDates = feed
+    .map((post) => getSortAtTimestamp(undefined, post.post.indexedAt))
+    .filter(isNotNil);
+
+  const postingDays = postingDates.reduce(
+    (acc, date) => {
+      acc[date.getDay()]++;
+      return acc;
+    },
+    Array.from({ length: 7 }, () => 0),
+  );
+  const postingHours = postingDates.reduce(
+    (acc, date) => {
+      acc[date.getHours()]++;
+      return acc;
+    },
+    Array.from({ length: 24 }, () => 0),
+  );
+
+  const mostActiveDay = postingDays.reduce(
+    (acc, dayValue, day) => {
+      return dayValue > acc.max ? { day, max: dayValue } : acc;
+    },
+    { day: 0, max: 0 },
+  ).day;
+  const peakPostingHour = postingHours.reduce(
+    (acc, hourValue, hour) => {
+      return hourValue > acc.max ? { hour, max: hourValue } : acc;
+    },
+    { hour: 0, max: 0 },
+  ).hour;
+
+  return { mostActiveDay, peakPostingHour };
 };

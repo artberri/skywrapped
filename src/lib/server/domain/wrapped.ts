@@ -9,4 +9,8 @@ export interface Wrapped {
     followers: number;
     accountAge: number;
   };
+  bestTime: {
+    mostActiveDay: number;
+    peakPostingHour: number;
+  };
 }

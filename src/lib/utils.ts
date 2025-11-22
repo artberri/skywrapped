@@ -17,6 +17,10 @@ export const ensureError = (error: unknown): Error => {
   return new Error(String(error));
 };
 
+export const isNotNil = <T>(value: T | null | undefined): value is T => {
+  return value !== null && value !== undefined;
+};
+
 /**
  * Captures a DOM element as an image and downloads it
  * @param element - The HTML element to capture
