@@ -18,6 +18,6 @@
   <div
     class="h-full w-full flex-1 bg-primary transition-all"
     style={transformStyle}
-  />
+  ></div>
 </div>
 

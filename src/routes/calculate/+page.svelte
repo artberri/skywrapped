@@ -2,7 +2,7 @@
 	import { goto } from "$app/navigation";
 	import Butterfly from "$lib/components/Butterfly.svelte";
 	import Cloud from "$lib/components/Cloud.svelte";
-	import Progress from "$lib/components/ui/Progress.svelte";
+	import Progress from "$lib/components/Progress.svelte";
 	import { onMount } from "svelte";
 	import type { PageProps } from "./$types";
 
