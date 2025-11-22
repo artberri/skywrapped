@@ -11,6 +11,7 @@ clone:
 
 dependencies:
   nixpkgs:
+    - gnused
     - coreutils
     - nodejs_24
     - pnpm
