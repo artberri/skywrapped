@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import type { Wrapped } from '$lib/server/domain/wrapped';
-	import { Check, Copy, Download, Share2, Sparkles } from '@lucide/svelte';
+	import { BadgePlus, Check, Copy, Share2, Sparkles } from '@lucide/svelte';
 	import Butterfly from '../Butterfly.svelte';
 	import Button from '../Button.svelte';
 	import Cloud from '../Cloud.svelte';
@@ -21,8 +22,8 @@
     console.log("Copy link");
   };
 
-  const handleDownload = () => {
-    console.log("Download image");
+  const handleCreateYourOwn = () => {
+    goto("/");
   };
 </script>
 
@@ -55,7 +56,7 @@
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
         <Button
           onclick={handleShareBluesky}
-          class="bg-gradient-to-r from-[hsl(206,100%,50%)] to-[hsl(268,70%,65%)] hover:from-[hsl(206,100%,45%)] hover:to-[hsl(268,70%,60%)] text-white border-2 border-white/30 h-12 flex-1 sm:flex-initial font-semibold shadow-xl hover:scale-105 transition-all duration-300"
+          class="relative z-50 bg-gradient-to-r from-[hsl(206,100%,50%)] to-[hsl(268,70%,65%)] hover:from-[hsl(206,100%,45%)] hover:to-[hsl(268,70%,60%)] text-white border-1 border-white/50 h-12 flex-1 sm:flex-initial font-semibold shadow-xl hover:scale-105 transition-all duration-300"
         >
           <Share2 class="w-5 h-5 mr-2" />
           Share on Bluesky
@@ -63,7 +64,7 @@
 
         <Button
           onclick={handleCopyLink}
-          class="bg-white hover:bg-white/95 text-[hsl(206,100%,40%)] border-2 border-white h-12 flex-1 sm:flex-initial font-semibold shadow-lg"
+          class="relative z-50 bg-white hover:bg-white/95 text-[hsl(206,100%,40%)] border-2 border-white h-12 flex-1 sm:flex-initial font-semibold shadow-lg hover:scale-105 transition-all duration-300"
         >
         {#if copied}
           <Check class="w-5 h-5 mr-2" />
@@ -75,11 +76,11 @@
         </Button>
 
         <Button
-          onclick={handleDownload}
-          class="bg-white hover:bg-white/95 text-[hsl(268,70%,55%)] border-2 border-white h-12 flex-1 sm:flex-initial font-semibold shadow-lg"
+          onclick={handleCreateYourOwn}
+          class="relative z-50 bg-white hover:bg-white/95 text-[hsl(268,70%,55%)] border-2 border-white h-12 flex-1 sm:flex-initial font-semibold shadow-lg hover:scale-105 transition-all duration-300"
         >
-          <Download class="w-5 h-5 mr-2" />
-          Download
+          <BadgePlus class="w-5 h-5 mr-2" />
+          Create your own!
         </Button>
       </div>
 

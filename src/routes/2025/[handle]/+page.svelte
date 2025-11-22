@@ -3,8 +3,8 @@
 	import IntroSlide from "$lib/components/slides/IntroSlide.svelte";
 	import OutroSlide from "$lib/components/slides/OutroSlide.svelte";
 	import ProfileOverviewSlide from "$lib/components/slides/ProfileOverviewSlide.svelte";
-	import { cn } from "$lib/utils";
-	import { ChevronLeft, ChevronRight } from '@lucide/svelte';
+	import { cn, downloadElementAsImage } from "$lib/utils";
+	import { ChevronLeft, ChevronRight, Download } from '@lucide/svelte';
 	import type { TouchEventHandler } from "svelte/elements";
 	import type { PageProps } from "./$types";
 
@@ -18,6 +18,7 @@
   ] as const;
 
   let currentSlide = $state(0);
+  let slideContainer: HTMLDivElement | undefined = undefined;
   let gradientStyles = {
     sky: 'bg-gradient-to-br from-[hsl(206,100%,50%)] to-[hsl(268,70%,65%)]',
     sunset: 'bg-gradient-to-b from-[hsl(340,80%,65%)] via-[hsl(268,70%,65%)] to-[hsl(206,100%,50%)]',
@@ -70,6 +71,26 @@
       }
   };
 
+  let handleDownload = async () => {
+    if (!slideContainer) return;
+
+    // Hide UI overlays for cleaner capture
+    const uiElements = slideContainer.querySelectorAll('[data-ui-overlay]');
+    uiElements.forEach((el) => {
+      (el as HTMLElement).style.display = 'none';
+    });
+
+    try {
+      const slideName = `${wrapped.handle}-${currentSlideData.type}-${wrapped.year}`;
+      await downloadElementAsImage(slideContainer, slideName);
+    } finally {
+      // Restore UI overlays
+      uiElements.forEach((el) => {
+        (el as HTMLElement).style.display = '';
+      });
+    }
+  };
+
   let currentSlideData = $derived(slides[currentSlide]);
   let CurrentSlideComponent = $derived(currentSlideData.component);
 </script>
@@ -80,6 +101,7 @@
 
 <div class="fixed inset-0 w-full h-full overflow-hidden">
   <div
+    bind:this={slideContainer}
     class={cn(
       "relative w-full h-full transition-all duration-700 ease-in-out",
       gradientStyles[currentSlideData.gradient]
@@ -88,7 +110,7 @@
     ontouchmove={handleTouchMove}
     ontouchend={handleTouchEnd}
   >
-    <div class="absolute top-0 left-0 right-0 z-20 p-4 md:p-6">
+    <div class="absolute top-0 left-0 right-0 z-20 p-4 md:p-6" data-ui-overlay>
       <ProgressBar total={slides.length} current={currentSlide} />
     </div>
 
@@ -96,7 +118,7 @@
       <CurrentSlideComponent wrapped={wrapped} />
     </div>
 
-    <div class="hidden md:block">
+    <div class="hidden md:block" data-ui-overlay>
       {#if currentSlide > 0}
         <button
           onclick={prevSlide}
@@ -118,7 +140,7 @@
       {/if}
     </div>
 
-    <div class="md:hidden absolute inset-0 z-10 flex">
+    <div class="md:hidden absolute inset-0 z-10 flex" data-ui-overlay>
       <button
         onclick={prevSlide}
         class="flex-1"
@@ -133,10 +155,20 @@
       ></button>
     </div>
 
-    <div class="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
-      <span class="text-white text-sm md:text-base font-medium">
-        {currentSlide + 1} / {slides.length}
-      </span>
+    <div class="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3" data-ui-overlay>
+      <button
+        onclick={handleDownload}
+        class="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2.5 transition-all duration-300 border border-white/20 cursor-pointer"
+        aria-label="Download slide"
+        title="Download slide as image"
+      >
+        <Download class="w-5 h-5 text-white" />
+      </button>
+      <div class="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
+        <span class="text-white text-sm md:text-base font-medium">
+          {currentSlide + 1} / {slides.length}
+        </span>
+      </div>
     </div>
   </div>
 </div>
