@@ -16,7 +16,7 @@ dependencies:
     - pnpm
 
 steps:
-  - name: "Install dependencies"
+  - name: "Install dependencies and run QA"
     command: "pnpm install --frozen-lockfile"
   - name: "Run QA"
     command: "pnpm run qa"
