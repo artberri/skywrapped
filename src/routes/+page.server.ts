@@ -25,7 +25,7 @@ export const actions: Actions = {
     }
 
     if (!handle) {
-      return fail(400, { error: "The handle field is required" });
+      return fail(400, { error: "Please enter a valid Bluesky handle (e.g., @username.bsky.social)" });
     }
 
     // Initiate the OAuth flow
@@ -35,6 +35,10 @@ export const actions: Actions = {
       url = await ctx.oauthClient.authorize(sanitizeHandle(handle));
     } catch (err) {
       const error = ensureError(err).message;
+      if (error.includes("Failed to resolve identity")) {
+        return fail(400, { error: "Please enter a valid Bluesky handle (e.g., @username.bsky.social)" });
+      }
+
       const errorMessage =
         err instanceof Error ? err.message : "Unexpected error";
       ctx.logger.warn({ error }, "OAuth authorize failed");
