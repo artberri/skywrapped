@@ -1,0 +1,22 @@
+when:
+  - event: ["push", "pull_request"]
+    branch: ["main"]
+
+engine: "nixery"
+
+clone:
+  skip: false
+  depth: 1
+  submodules: false
+
+dependencies:
+  nixpkgs:
+    - proto
+
+steps:
+  - name: "Install node and pnpm"
+    command: "proto install"
+  - name: "Install dependencies"
+    command: "pnpm install --frozen-lockfile"
+  - name: "Run QA"
+    command: "pnpm run qa"
