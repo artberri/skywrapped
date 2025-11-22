@@ -1,8 +1,11 @@
 import { LOG_LEVEL } from "$env/static/private";
+import type { Agent } from "@atproto/api";
 import { NodeOAuthClient } from "@atproto/oauth-client-node";
 import { pino, type Logger } from "pino";
 import { createOAuthClient } from "./auth/client";
-import { createDb, type Database } from "./db";
+import { BlueskyClient } from "./blueskyClient";
+import { createDb, DrizzleWrappedRepository, type Database } from "./db";
+import type { WrappedRepository } from "./domain/wrappedRepository";
 import {
   createBidirectionalResolver,
   type BidirectionalResolver,
@@ -16,6 +19,8 @@ export type AppContext = {
   logger: Logger;
   oauthClient: NodeOAuthClient;
   resolver: BidirectionalResolver;
+  wrappedRepository: WrappedRepository;
+  getBlueskyClient: (agent: Agent) => BlueskyClient;
   destroy: () => Promise<void>;
 };
 
@@ -33,7 +38,8 @@ export async function createAppContext(): Promise<AppContext> {
     logger,
     oauthClient,
     resolver,
-
+    wrappedRepository: new DrizzleWrappedRepository(db),
+    getBlueskyClient: (agent: Agent) => new BlueskyClient(agent),
     async destroy() {
       db.$client.close();
     },

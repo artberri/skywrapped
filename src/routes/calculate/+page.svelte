@@ -1,18 +1,78 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
 	import Butterfly from "$lib/components/Butterfly.svelte";
 	import Cloud from "$lib/components/Cloud.svelte";
 	import Progress from "$lib/components/ui/Progress.svelte";
+	import { onMount } from "svelte";
+	import type { PageProps } from "./$types";
 
   let progress = $state(0);
-  let messageIndex = $state(0);
-  let loadingMessages = [
-    "Analyzing your posts...",
-    "Counting your followers...",
-    "Finding your top moments...",
-    "Calculating engagement...",
-    "Discovering your topics...",
-    "Wrapping up your year...",
-  ];
+  let message = $state("Analyzing your posts...");
+  let {  data }: PageProps = $props();
+  let { handle } = data;
+
+  onMount(async () => {
+    try {
+      const response = await fetch("/api/calculate");
+      if (!response.ok) {
+        // If unauthorized, redirect to home
+        if (response.status === 401) {
+          goto("/");
+          return;
+        }
+        throw new Error("Failed to start calculation");
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error("No response body");
+      }
+
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const data = line.slice(6);
+            try {
+              const parsed = JSON.parse(data);
+
+              if (parsed.done) {
+                // Calculation complete, redirect or show success
+                goto(`/2025/${handle}`);
+                return;
+              }
+
+              if (parsed.error) {
+                console.error("Calculation error:", parsed.error);
+                return;
+              }
+
+              if (parsed.step !== undefined && parsed.message && parsed.progress !== undefined) {
+                // Ensure messageIndex stays within bounds
+                message = parsed.message;
+                progress = parsed.progress;
+              }
+            } catch (e) {
+              console.error("Failed to parse SSE data:", e);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error during calculation:", error);
+    }
+  });
 </script>
 
 <style lang="postcss">
@@ -50,7 +110,7 @@
 
       <div class="space-y-4">
         <h2 class="text-3xl md:text-4xl font-bold text-white drop-shadow-lg min-h-[3rem] transition-all duration-300">
-          {loadingMessages[messageIndex]}
+          {message}
         </h2>
       </div>
 

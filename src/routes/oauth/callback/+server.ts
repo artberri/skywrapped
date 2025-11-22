@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({
   const response = new Response(null, {
     status: 302,
     headers: {
-      Location: `${baseUrl}/app`,
+      Location: `${baseUrl}/calculate`,
     },
   });
 

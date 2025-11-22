@@ -6,7 +6,6 @@ import { createAppContext, type AppContext } from "$lib/server/context";
 import { run } from "$lib/server/process";
 import { redirect, type Handle, type ServerInit } from "@sveltejs/kit";
 import { once } from "node:events";
-import util from "node:util";
 
 let ctx: AppContext;
 
@@ -41,12 +40,6 @@ export const handle: Handle = async ({ event, resolve }) => {
       );
       redirect(302, "/");
     }
-
-    const f = await agent.getAuthorFeed({ actor: agent.assertDid });
-    console.log(util.inspect(f, false, null, true /* enable colors */));
-
-    const f2 = await agent.getFollowers({ actor: agent.assertDid });
-    console.log(util.inspect(f2, false, null, true /* enable colors */));
     event.locals.agent = agent;
   }
 
@@ -55,7 +48,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   return response;
 };
 
-const requiredPath = "/app";
+const requiredPath = "/calculate";
 function isAuthRequired(path: string) {
-  return path === requiredPath || path.startsWith(requiredPath + "/");
+  return path.includes(requiredPath + "/") || path.endsWith(requiredPath);
 }

@@ -1,4 +1,11 @@
-import { primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  integer,
+  primaryKey,
+  sqliteTable,
+  text,
+  uniqueIndex,
+} from "drizzle-orm/sqlite-core";
+import type { Wrapped } from "../domain/wrapped";
 
 export const authStateTable = sqliteTable(
   "auth_state",
@@ -16,4 +23,18 @@ export const authSessionTable = sqliteTable(
     session: text("session").notNull(),
   },
   (table) => [primaryKey({ name: "pk_auth_session", columns: [table.key] })],
+);
+
+export const wrappedTable = sqliteTable(
+  "wrapped",
+  {
+    did: text("did").notNull(),
+    handle: text("handle").notNull(),
+    year: integer("year").notNull(),
+    data: text("data", { mode: "json" }).$type<Wrapped>(),
+  },
+  (table) => [
+    primaryKey({ name: "pk_wrapped", columns: [table.did, table.year] }),
+    uniqueIndex("idx_wrapped_did_year").on(table.handle, table.year),
+  ],
 );

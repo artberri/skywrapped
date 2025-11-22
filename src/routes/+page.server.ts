@@ -25,7 +25,10 @@ export const actions: Actions = {
     }
 
     if (!handle) {
-      return fail(400, { error: "Please enter a valid Bluesky handle (e.g., @username.bsky.social)" });
+      return fail(400, {
+        error:
+          "Please enter a valid Bluesky handle (e.g., @username.bsky.social)",
+      });
     }
 
     // Initiate the OAuth flow
@@ -36,7 +39,10 @@ export const actions: Actions = {
     } catch (err) {
       const error = ensureError(err).message;
       if (error.includes("Failed to resolve identity")) {
-        return fail(400, { error: "Please enter a valid Bluesky handle (e.g., @username.bsky.social)" });
+        return fail(400, {
+          error:
+            "Please enter a valid Bluesky handle (e.g., @username.bsky.social)",
+        });
       }
 
       const errorMessage =

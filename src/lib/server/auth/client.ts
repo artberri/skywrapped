@@ -38,7 +38,7 @@ export async function createOAuthClient(db: Database) {
 
   const clientMetadata: OAuthClientMetadataInput = PUBLIC_BASE_URL
     ? {
-        client_name: "Statusphere Example App",
+        client_name: "Sky Explorer",
         client_id: `${PUBLIC_BASE_URL}/oauth-client-metadata.json`,
         jwks_uri: `${PUBLIC_BASE_URL}/.well-known/jwks.json`,
         redirect_uris: [`${PUBLIC_BASE_URL}/oauth/callback`],

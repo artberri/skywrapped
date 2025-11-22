@@ -5,6 +5,7 @@ export interface BidirectionalResolver {
   resolveDidsToHandles(
     dids: string[],
   ): Promise<Record<string, string | undefined>>;
+  resolveHandleToDid(handle: string): Promise<string | undefined>;
 }
 
 export function createBidirectionalResolver({
@@ -32,6 +33,15 @@ export function createBidirectionalResolver({
           ),
         ),
       );
+    },
+
+    async resolveHandleToDid(handle: string): Promise<string | undefined> {
+      try {
+        const { did } = await identityResolver.resolve(handle);
+        if (did) return did;
+      } catch {
+        // Ignore
+      }
     },
   };
 }
