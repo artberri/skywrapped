@@ -14,12 +14,12 @@ type ListWithMembership = AppBskyGraphGetListsWithMembership.ListWithMembership;
 export const calculateWrapped = async ({
   year,
   profile,
-  followers,
-  follows,
-  lists,
+  followers: _followers,
+  follows: _follows,
+  lists: _lists,
   feed,
-  likes,
-  bookmarks,
+  likes: _likes,
+  bookmarks: _bookmarks,
 }: {
   year: number;
   profile: ProfileViewDetailed;

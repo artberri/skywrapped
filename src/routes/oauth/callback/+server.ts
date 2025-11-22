@@ -33,7 +33,7 @@ export const GET: RequestHandler = async ({
       try {
         const oauthSession = await ctx.oauthClient.restore(session.did);
         if (oauthSession) {
-          oauthSession.signOut();
+          await oauthSession.signOut();
         }
       } catch (err) {
         ctx.logger.warn({ err }, "Oauth restore failed");

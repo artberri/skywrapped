@@ -10,7 +10,7 @@ import { once } from "node:events";
 let ctx: AppContext;
 
 export const init: ServerInit = async () => {
-  run(async (killSignal) => {
+  void run(async (killSignal) => {
     // Create the application context
     ctx = await createAppContext();
 
