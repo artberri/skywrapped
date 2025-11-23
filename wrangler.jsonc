@@ -6,6 +6,7 @@
   "workers_dev": false,
   "keep_vars": false,
   "send_metrics": false,
+  "upload_source_maps": true,
   "compatibility_flags": [
     "nodejs_compat",
     "enable_weak_ref"
