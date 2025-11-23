@@ -2,20 +2,17 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "skywrapped",
   "main": ".svelte-kit/cloudflare/_worker.js",
-  "compatibility_date": "2025-11-24",
+  "compatibility_date": "2025-11-23",
   "workers_dev": false,
   "keep_vars": false,
   "send_metrics": false,
   "upload_source_maps": true,
   "compatibility_flags": [
     "nodejs_compat",
-    "enable_weak_ref",
-    "enable_workers_observability_tracing",
     "enable_nodejs_process_v2",
     "enable_nodejs_http_server_modules",
     "enable_nodejs_http_modules",
     "cache_no_cache_enabled",
-    "enable_navigator_language",
     "nodejs_compat_populate_process_env"
   ],
   "routes": [{
