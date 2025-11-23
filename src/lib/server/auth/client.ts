@@ -68,6 +68,6 @@ export async function createOAuthClient(db: Database) {
     clientMetadata,
     stateStore: new StateStore(db),
     sessionStore: new SessionStore(db),
-    handleResolver,
+    handleResolver: PUBLIC_BASE_URL ? undefined : handleResolver,
   });
 }
