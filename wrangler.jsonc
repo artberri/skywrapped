@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "skywrapped",
+  "main": ".svelte-kit/cloudflare/_worker.js",
+  "compatibility_date": "2025-01-01",
+  "workers_dev": false,
+  "keep_vars": false,
+  "send_metrics": false,
+  "compatibility_flags": [
+    "nodejs_compat",
+    "enable_weak_ref"
+  ],
+  "routes": [{
+    "pattern": "skywrapped.app",
+    "custom_domain": true
+  },{
+    "pattern": "www.skywrapped.app",
+    "custom_domain": true
+  }],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "assets": {
+		"binding": "ASSETS",
+		"directory": ".svelte-kit/cloudflare"
+	}
+}

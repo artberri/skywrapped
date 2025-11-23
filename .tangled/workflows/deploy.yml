@@ -1,5 +1,5 @@
 when:
-  - event: ["pull_request"]
+  - event: ["push"]
     branch: ["main"]
 
 engine: "nixery"
@@ -20,3 +20,5 @@ steps:
     command: "pnpm install --frozen-lockfile"
   - name: "Run QA"
     command: "pnpm run qa"
+  - name: "Build"
+    command: "pnpm run build"

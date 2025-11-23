@@ -1,4 +1,4 @@
-import { OAuthClient } from "@atproto/oauth-client-node";
+import type { OAuthClient } from "@atproto/oauth-client-node";
 
 export interface BidirectionalResolver {
   resolveDidToHandle(did: string): Promise<string | undefined>;
