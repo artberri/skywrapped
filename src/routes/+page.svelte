@@ -36,7 +36,7 @@
 
       <div class="space-y-2">
         <h1 class="text-5xl md:text-6xl font-bold text-white drop-shadow-lg">
-          Sky Explorer
+          Sky Wrapped
         </h1>
         <p class="text-xl md:text-2xl text-white/90">
           Your year on Bluesky wrapped in a butterfly

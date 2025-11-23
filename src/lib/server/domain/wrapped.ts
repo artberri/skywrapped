@@ -1,16 +1,24 @@
 export interface Wrapped {
-  did: string;
-  handle: string;
-  year: number;
-  displayName: string;
-  current: {
-    posts: number;
-    following: number;
-    followers: number;
-    accountAge: number;
+  readonly did: string;
+  readonly handle: string;
+  readonly year: number;
+  readonly displayName: string;
+  readonly current: {
+    readonly posts: number;
+    readonly following: number;
+    readonly followers: number;
+    readonly accountAge: number;
   };
-  bestTime: {
-    mostActiveDay: number;
-    peakPostingHour: number;
+  readonly yearActivity: {
+    readonly posts: number;
+    readonly replies: number;
+    readonly reposts: number;
+    readonly quotes: number;
+    readonly likes: number;
+    readonly bookmarks: number;
+  };
+  readonly bestTime: {
+    readonly mostActiveDay: number;
+    readonly peakPostingHour: number;
   };
 }

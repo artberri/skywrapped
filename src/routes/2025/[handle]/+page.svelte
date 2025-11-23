@@ -4,6 +4,7 @@
 	import IntroSlide from "$lib/components/slides/IntroSlide.svelte";
 	import OutroSlide from "$lib/components/slides/OutroSlide.svelte";
 	import ProfileOverviewSlide from "$lib/components/slides/ProfileOverviewSlide.svelte";
+	import YourActivitySlide from "$lib/components/slides/YourActivitySlide.svelte";
 	import { cn, downloadElementAsImage } from "$lib/utils";
 	import { ChevronLeft, ChevronRight, Download } from '@lucide/svelte';
 	import type { TouchEventHandler } from "svelte/elements";
@@ -15,8 +16,9 @@
   let slides = [
     { id: 1, type: 'intro', gradient: 'sky', component: IntroSlide },
     { id: 2, type: 'profile-overview', gradient: 'dawn', component: ProfileOverviewSlide },
-    { id: 3, type: 'best-time', gradient: 'sunset', component: BestTimeSlide },
-    { id: 4, type: 'outro', gradient: 'sunset', component: OutroSlide },
+    { id: 3, type: 'your-activity', gradient: 'sunset', component: YourActivitySlide },
+    { id: 4, type: 'best-time', gradient: 'sunset', component: BestTimeSlide },
+    { id: 5, type: 'outro', gradient: 'sunset', component: OutroSlide },
   ] as const;
 
   let currentSlide = $state(0);

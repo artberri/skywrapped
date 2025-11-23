@@ -1,11 +1,13 @@
+import { isNotNil } from "$lib/utils";
 import type {
   AppBskyActorDefs,
+  AppBskyEmbedRecord,
+  AppBskyEmbedRecordWithMedia,
   AppBskyFeedDefs,
   AppBskyGraphGetListsWithMembership,
 } from "@atproto/api";
 import type { Wrapped } from "./domain/wrapped";
 import { getSortAtTimestamp } from "./timestampUtils";
-import { isNotNil } from "$lib/utils";
 
 type FeedViewPost = AppBskyFeedDefs.FeedViewPost;
 type ProfileViewDetailed = AppBskyActorDefs.ProfileViewDetailed;
@@ -19,8 +21,8 @@ export const calculateWrapped = async ({
   follows: _follows,
   lists: _lists,
   feed,
-  likes: _likes,
-  bookmarks: _bookmarks,
+  likes,
+  bookmarks,
 }: {
   year: number;
   profile: ProfileViewDetailed;
@@ -45,6 +47,7 @@ export const calculateWrapped = async ({
       accountAge: calculateAccountAge(profile.createdAt, profile.indexedAt),
     },
     bestTime,
+    yearActivity: calculateYearActivity(feed, likes, bookmarks),
   };
 };
 
@@ -109,4 +112,83 @@ const calculateBestTime = (
   ).hour;
 
   return { mostActiveDay, peakPostingHour };
+};
+
+/**
+ * Check if a post is a quote (has a record embed containing another post)
+ */
+const isQuotePost = (post: FeedViewPost): boolean => {
+  const embed = post.post.embed;
+  if (!embed) {
+    return false;
+  }
+
+  // Check for app.bsky.embed.record#view
+  if (embed.$type === "app.bsky.embed.record#view") {
+    const recordEmbed = embed as AppBskyEmbedRecord.View;
+    // A quote is when the embedded record is a post (viewRecord)
+    // The record property is a union type, check if it's a ViewRecord
+    const record = recordEmbed.record as { $type?: string };
+    return record?.$type === "app.bsky.embed.record#viewRecord";
+  }
+
+  // Check for app.bsky.embed.recordWithMedia#view
+  if (embed.$type === "app.bsky.embed.recordWithMedia#view") {
+    const recordWithMediaEmbed = embed as AppBskyEmbedRecordWithMedia.View;
+    // A quote is when the embedded record is a post (viewRecord)
+    // The record property is a View type (union), check if it's a ViewRecord
+    const record = recordWithMediaEmbed.record as { $type?: string };
+    return record?.$type === "app.bsky.embed.record#viewRecord";
+  }
+
+  return false;
+};
+
+const calculateYearActivity = (
+  feed: FeedViewPost[],
+  likes: FeedViewPost[],
+  bookmarks: FeedViewPost[],
+): {
+  posts: number;
+  replies: number;
+  reposts: number;
+  quotes: number;
+  likes: number;
+  bookmarks: number;
+} => {
+  let posts = feed.length;
+  let replies = 0;
+  let reposts = 0;
+  let quotes = 0;
+
+  for (const post of feed) {
+    // Check reposts first (these are not original posts)
+    if (post.reason?.$type === "app.bsky.feed.defs#reasonRepost") {
+      reposts++;
+      posts--;
+      continue; // Skip further checks for reposts
+    }
+
+    // Check quotes (a quote can also be a reply, but we count it as a quote)
+    if (isQuotePost(post)) {
+      quotes++;
+      posts--;
+      continue; // Skip reply check - quote takes precedence
+    }
+
+    // Check replies (only if not already counted as quote)
+    if (post.reply) {
+      replies++;
+      posts--;
+    }
+  }
+
+  return {
+    posts,
+    replies,
+    reposts,
+    quotes,
+    likes: likes.length,
+    bookmarks: bookmarks.length,
+  };
 };
