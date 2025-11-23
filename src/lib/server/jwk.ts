@@ -1,8 +1,13 @@
 import { ensureError } from "$lib/utils";
-import { jwkPubSchema } from "@atproto/oauth-client-node";
+import { jwkSchema } from "@atproto/oauth-client-node";
 import { z } from "zod";
 
-const jsonWebKeysSchema = z.array(jwkPubSchema).nonempty();
+const jsonWebKeySchema = z.intersection(
+  jwkSchema,
+  z.object({ kid: z.string().nonempty() }),
+) satisfies z.ZodType<JsonWebKey>;
+
+const jsonWebKeysSchema = z.array(jsonWebKeySchema).nonempty();
 
 export type PublicJwks = z.output<typeof jsonWebKeysSchema>;
 

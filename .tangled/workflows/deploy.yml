@@ -16,11 +16,12 @@ dependencies:
     - pnpm
 
 environment:
+  CI: "true"
+  NO_COLOR: "true"
   NODE_ENV: "production"
   PUBLIC_BASE_URL: "https://skywrapped.app"
   PORT: ""
   LOG_LEVEL: "info"
-  CI: "true"
 
 steps:
   - name: "Install dependencies"
