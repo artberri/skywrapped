@@ -24,5 +24,11 @@
   "assets": {
 		"binding": "ASSETS",
 		"directory": ".svelte-kit/cloudflare"
-	}
+	},
+  "vars": {
+    "NODE_ENV": "production",
+    "PUBLIC_BASE_URL": "https://skywrapped.app",
+    "PORT": "",
+    "LOG_LEVEL": "info"
+  }
 }

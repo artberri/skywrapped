@@ -28,3 +28,7 @@ steps:
     command: "pnpm run qa"
   - name: "Build"
     command: "pnpm run build"
+  - name: "Migrate database"
+    command: "pnpm run db:migrate"
+  - name: "Deploy"
+    command: "pnpm run deploy"
