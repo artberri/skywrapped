@@ -15,6 +15,13 @@ dependencies:
     - nodejs_24
     - pnpm
 
+environment:
+  NODE_ENV: "production"
+  PUBLIC_BASE_URL: "https://skywrapped.app"
+  PORT: ""
+  LOG_LEVEL: "info"
+  CI: "true"
+
 steps:
   - name: "Install dependencies"
     command: "pnpm install --frozen-lockfile"

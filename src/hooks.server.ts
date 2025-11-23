@@ -25,6 +25,7 @@ export const init: ServerInit = async () => {
 
   const url = PUBLIC_BASE_URL || `http://127.0.0.1:${PORT}`;
   ctx.logger.info(`Server (Dev server mode:${dev}) running at ${url}`);
+  console.log(`Server (Dev server mode:${dev}) running at ${url}`);
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
