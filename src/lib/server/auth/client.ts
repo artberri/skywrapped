@@ -17,6 +17,10 @@ export async function createOAuthClient(db: Database) {
   // Confidential client require a keyset accessible on the internet. Non
   // internet clients (e.g. development) cannot expose a keyset on the internet
   // so they can't be private..
+
+  console.log(`PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}`);
+  console.log(`PRIVATE_KEYS: ${PRIVATE_KEYS}`);
+
   const keyset =
     PUBLIC_BASE_URL && PRIVATE_KEYS
       ? new Keyset(
