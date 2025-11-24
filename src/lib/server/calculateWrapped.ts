@@ -4,7 +4,6 @@ import type {
   AppBskyEmbedRecord,
   AppBskyEmbedRecordWithMedia,
   AppBskyFeedDefs,
-  AppBskyGraphGetListsWithMembership,
 } from "@atproto/api";
 import type { Wrapped } from "./domain/wrapped";
 import { getSortAtTimestamp } from "./timestampUtils";
@@ -12,14 +11,12 @@ import { getSortAtTimestamp } from "./timestampUtils";
 type FeedViewPost = AppBskyFeedDefs.FeedViewPost;
 type ProfileViewDetailed = AppBskyActorDefs.ProfileViewDetailed;
 type ProfileView = AppBskyActorDefs.ProfileView;
-type ListWithMembership = AppBskyGraphGetListsWithMembership.ListWithMembership;
 
 export const calculateWrapped = async ({
   year,
   profile,
   followers: _followers,
   follows: _follows,
-  lists: _lists,
   feed,
   likes,
   bookmarks,
@@ -28,26 +25,39 @@ export const calculateWrapped = async ({
   profile: ProfileViewDetailed;
   followers: ProfileView[];
   follows: ProfileView[];
-  lists: ListWithMembership[];
   feed: FeedViewPost[];
   likes: FeedViewPost[];
   bookmarks: FeedViewPost[];
 }): Promise<Wrapped> => {
+  const current = calculateCurrent(profile, feed);
   const bestTime = calculateBestTime(feed);
+  const { yearActivity, engagement } = calculateYearActivityAndEngagement(
+    feed,
+    likes,
+    bookmarks,
+  );
 
   return {
     did: profile.did,
     handle: profile.handle,
     year,
     displayName: profile.displayName ?? profile.handle,
-    current: {
-      posts: feed.length,
-      following: profile.followsCount ?? 0,
-      followers: profile.followersCount ?? 0,
-      accountAge: calculateAccountAge(profile.createdAt, profile.indexedAt),
-    },
+    current,
     bestTime,
-    yearActivity: calculateYearActivity(feed, likes, bookmarks),
+    yearActivity,
+    engagement,
+  };
+};
+
+const calculateCurrent = (
+  profile: ProfileViewDetailed,
+  feed: FeedViewPost[],
+): Wrapped["current"] => {
+  return {
+    posts: feed.length,
+    following: profile.followsCount ?? 0,
+    followers: profile.followersCount ?? 0,
+    accountAge: calculateAccountAge(profile.createdAt, profile.indexedAt),
   };
 };
 
@@ -76,9 +86,7 @@ const calculateAccountAge = (
   return Math.max(0, Math.round(ageInYears * 10) / 10);
 };
 
-const calculateBestTime = (
-  feed: FeedViewPost[],
-): { mostActiveDay: number; peakPostingHour: number } => {
+const calculateBestTime = (feed: FeedViewPost[]): Wrapped["bestTime"] => {
   const postingDates = feed
     .map((post) => getSortAtTimestamp(undefined, post.post.indexedAt))
     .filter(isNotNil);
@@ -111,7 +119,11 @@ const calculateBestTime = (
     { hour: 0, max: 0 },
   ).hour;
 
-  return { mostActiveDay, peakPostingHour };
+  return {
+    mostActiveDay,
+    peakPostingHour,
+    averagePostsPerDay: Math.round((feed.length / 365) * 10) / 10,
+  };
 };
 
 /**
@@ -144,22 +156,24 @@ const isQuotePost = (post: FeedViewPost): boolean => {
   return false;
 };
 
-const calculateYearActivity = (
+const calculateYearActivityAndEngagement = (
   feed: FeedViewPost[],
   likes: FeedViewPost[],
   bookmarks: FeedViewPost[],
 ): {
-  posts: number;
-  replies: number;
-  reposts: number;
-  quotes: number;
-  likes: number;
-  bookmarks: number;
+  yearActivity: Wrapped["yearActivity"];
+  engagement: Wrapped["engagement"];
 } => {
   let posts = feed.length;
   let replies = 0;
   let reposts = 0;
   let quotes = 0;
+
+  let engagementReplies = 0;
+  let engagementReposts = 0;
+  let engagementQuotes = 0;
+  let engagementLikes = 0;
+  let engagementBookmarks = 0;
 
   for (const post of feed) {
     // Check reposts first (these are not original posts)
@@ -169,11 +183,10 @@ const calculateYearActivity = (
       continue; // Skip further checks for reposts
     }
 
-    // Check quotes (a quote can also be a reply, but we count it as a quote)
+    // Check quotes (a quote can also be a reply)
     if (isQuotePost(post)) {
       quotes++;
       posts--;
-      continue; // Skip reply check - quote takes precedence
     }
 
     // Check replies (only if not already counted as quote)
@@ -181,14 +194,39 @@ const calculateYearActivity = (
       replies++;
       posts--;
     }
+
+    if (post.post.replyCount && post.post.replyCount > 0) {
+      engagementReplies++;
+    }
+    if (post.post.repostCount && post.post.repostCount > 0) {
+      engagementReposts++;
+    }
+    if (post.post.quoteCount && post.post.quoteCount > 0) {
+      engagementQuotes++;
+    }
+    if (post.post.likeCount && post.post.likeCount > 0) {
+      engagementLikes++;
+    }
+    if (post.post.bookmarkCount && post.post.bookmarkCount > 0) {
+      engagementBookmarks++;
+    }
   }
 
   return {
-    posts,
-    replies,
-    reposts,
-    quotes,
-    likes: likes.length,
-    bookmarks: bookmarks.length,
+    yearActivity: {
+      posts,
+      replies,
+      reposts,
+      quotes,
+      likes: likes.length,
+      bookmarks: bookmarks.length,
+    },
+    engagement: {
+      replies: engagementReplies,
+      reposts: engagementReposts,
+      quotes: engagementQuotes,
+      likes: engagementLikes,
+      bookmarks: engagementBookmarks,
+    },
   };
 };

@@ -20,5 +20,13 @@ export interface Wrapped {
   readonly bestTime: {
     readonly mostActiveDay: number;
     readonly peakPostingHour: number;
+    readonly averagePostsPerDay: number;
+  };
+  readonly engagement: {
+    readonly replies: number;
+    readonly reposts: number;
+    readonly quotes: number;
+    readonly likes: number;
+    readonly bookmarks: number;
   };
 }

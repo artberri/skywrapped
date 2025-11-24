@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ProgressBar from "$lib/components/ProgressBar.svelte";
 	import BestTimeSlide from "$lib/components/slides/BestTimeSlide.svelte";
+	import EngagementSlide from "$lib/components/slides/EngagementSlide.svelte";
 	import IntroSlide from "$lib/components/slides/IntroSlide.svelte";
 	import OutroSlide from "$lib/components/slides/OutroSlide.svelte";
 	import ProfileOverviewSlide from "$lib/components/slides/ProfileOverviewSlide.svelte";
@@ -17,17 +18,19 @@
     { id: 1, type: 'intro', gradient: 'sky', component: IntroSlide },
     { id: 2, type: 'profile-overview', gradient: 'dawn', component: ProfileOverviewSlide },
     { id: 3, type: 'your-activity', gradient: 'sunset', component: YourActivitySlide },
-    { id: 4, type: 'best-time', gradient: 'sunset', component: BestTimeSlide },
+    { id: 4, type: 'best-time', gradient: 'midnight', component: BestTimeSlide },
+    { id: 5, type: 'engagement', gradient: 'ocean', component: EngagementSlide },
     { id: 5, type: 'outro', gradient: 'sunset', component: OutroSlide },
   ] as const;
 
   let currentSlide = $state(0);
   let slideContainer: HTMLDivElement | undefined = undefined;
   let gradientStyles = {
-    sky: 'bg-gradient-to-br from-[hsl(206,100%,50%)] to-[hsl(268,70%,65%)]',
+    sky: 'bg-gradient-to-br from-[hsl(206,85%,45%)] to-[hsl(268,60%,50%)]',
     sunset: 'bg-gradient-to-b from-[hsl(340,80%,65%)] via-[hsl(268,70%,65%)] to-[hsl(206,100%,50%)]',
     dawn: 'bg-gradient-to-b from-[hsl(206,100%,50%)] via-[hsl(195,85%,60%)] to-[hsl(50,100%,75%)]',
     midnight: 'bg-gradient-to-br from-[hsl(230,40%,20%)] to-[hsl(268,50%,30%)]',
+    ocean: 'bg-gradient-to-br from-[hsl(190,85%,40%)] via-[hsl(210,80%,50%)] to-[hsl(240,70%,55%)]',
   };
 
   let touchStart = $state(0);

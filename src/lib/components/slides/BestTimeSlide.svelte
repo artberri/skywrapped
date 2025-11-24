@@ -29,7 +29,7 @@
         <div class="text-base md:text-xl text-white/80 mb-2">
           Most active day
         </div>
-        <div class="text-4xl md:text-6xl font-bold text-white">
+        <div class="text-3xl md:text-5xl font-bold text-white">
           {mostActiveDay}
         </div>
       </div>
@@ -39,14 +39,18 @@
         <div class="text-base md:text-xl text-white/80 mb-2">
           Peak posting time
         </div>
-        <div class="text-4xl md:text-6xl font-bold text-white">
+        <div class="text-3xl md:text-5xl font-bold text-white">
           {peakPostingHour} {peakPostingHourSuffix}
         </div>
       </div>
     </div>
 
-    <p class="text-base md:text-xl text-white/70 animate-fade-in" style:animation-delay="0.3s">
-      You have a rhythm that works for you
+    <p class="text-xl md:text-3xl text-white/90 animate-fade-in mb-2" style:animation-delay="0.3s">
+      You averaged <strong>{wrapped.bestTime.averagePostsPerDay}</strong> post a day
+    </p>
+
+    <p class="text-base md:text-xl text-white/70 animate-fade-in" style:animation-delay="0.4s">
+      A rhythm that suits you
     </p>
   </div>
 </div>

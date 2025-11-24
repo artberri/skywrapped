@@ -23,12 +23,12 @@
   <Butterfly class="absolute bottom-20 left-8 text-white/30 animate-float-delayed" size="md" />
 
   <div class="relative z-10 text-center space-y-6 md:space-y-8 max-w-4xl w-full">
-    <h2 class="text-3xl md:text-5xl font-bold text-white animate-fade-in">
-      Your 2025 was full of life
+    <h2 class="text-3xl md:text-5xl font-bold text-white animate-fade-in mb-2">
+      Your Year in the Sky
     </h2>
 
     <p class="text-lg md:text-xl text-white/80 animate-fade-in" style:animation-delay="0.1s">
-      Here's how you spent your time in the sky
+      Here’s how you spent it
     </p>
 
     <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">

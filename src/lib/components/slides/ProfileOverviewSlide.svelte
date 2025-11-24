@@ -19,7 +19,7 @@
 
   <div class="relative z-10 text-center space-y-8 max-w-3xl w-full">
     <div class="space-y-3 animate-fade-in">
-      <h2 class="text-4xl md:text-5xl font-bold text-white">
+      <h2 class="text-4xl md:text-5xl font-bold text-white mb-2">
         First, let's look at
       </h2>
       <p class="text-2xl md:text-3xl text-white/90">
@@ -27,7 +27,7 @@
       </p>
     </div>
 
-    <div class="grid grid-cols-2 gap-4 md:gap-6 mt-12 animate-scale-in" style:animation-delay="0.2s">
+    <div class="grid grid-cols-2 gap-4 md:gap-6 mt-8 animate-scale-in" style:animation-delay="0.2s">
       <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 space-y-3 hover:bg-white/15 transition-all duration-300">
         <MessageCircle class="w-8 h-8 md:w-10 md:h-10 text-white mx-auto" />
         <div class="text-3xl md:text-4xl font-bold text-white">

@@ -3,7 +3,7 @@ import { YEAR } from "$lib/server/constants";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
-const MIN_STEP_DURATION = 300; // 0.3 seconds in milliseconds
+const MIN_STEP_DURATION = 200; // 0.2 seconds in milliseconds
 
 async function ensureMinDuration(startTime: number): Promise<void> {
   const elapsed = Date.now() - startTime;
@@ -77,53 +77,45 @@ export const GET: RequestHandler = async ({ locals }) => {
         await ensureMinDuration(step4Start);
         sendProgress(4, "Calculating engagement...", 57);
 
-        // Step 5: Get lists
+        // Step 5: Get likes
         const step5Start = Date.now();
-        sendProgress(4, "Discovering your topics...", 71);
-        const lists = await blueskyClient.getListsWithMembership(actor);
-        await ensureMinDuration(step5Start);
-        sendProgress(5, "Discovering your topics...", 71);
-
-        // Step 6: Get likes
-        const step6Start = Date.now();
-        sendProgress(5, "Counting your likes...", 79);
+        sendProgress(4, "Counting your likes...", 69);
         const likes = await blueskyClient.getLikesByYear(actor, YEAR);
-        await ensureMinDuration(step6Start);
-        sendProgress(6, "Counting your likes...", 79);
+        await ensureMinDuration(step5Start);
+        sendProgress(5, "Counting your likes...", 69);
 
-        // Step 7: Get bookmarks
-        const step7Start = Date.now();
-        sendProgress(6, "Counting your bookmarks...", 84);
+        // Step 6: Get bookmarks
+        const step6Start = Date.now();
+        sendProgress(5, "Counting your bookmarks...", 81);
         const bookmarks = await blueskyClient.getBookmarksByYear(YEAR);
-        await ensureMinDuration(step7Start);
-        sendProgress(7, "Counting your bookmarks...", 84);
+        await ensureMinDuration(step6Start);
+        sendProgress(6, "Counting your bookmarks...", 81);
 
         // Step 7: Calculate wrapped
-        const step8Start = Date.now();
-        sendProgress(7, "Wrapping up your year...", 92);
+        const step7Start = Date.now();
+        sendProgress(6, "Wrapping up your year...", 92);
         const wrapped = await calculateWrapped({
           year: YEAR,
           profile,
           followers,
           follows,
-          lists,
           feed,
           likes,
           bookmarks,
         });
-        await ensureMinDuration(step8Start);
-        sendProgress(8, "Wrapping up your year...", 92);
+        await ensureMinDuration(step7Start);
+        sendProgress(7, "Wrapping up your year...", 92);
 
         // Step 8: Save wrapped
-        const step9Start = Date.now();
-        sendProgress(8, "Saving your wrapped...", 100);
+        const step8Start = Date.now();
+        sendProgress(7, "Saving your wrapped...", 100);
         await ctx.wrappedRepository.save(wrapped);
-        await ensureMinDuration(step9Start);
-        sendProgress(9, "Saving your wrapped...", 100);
+        await ensureMinDuration(step8Start);
+        sendProgress(8, "Saving your wrapped...", 100);
 
         // Send completion
-        const step10Start = Date.now();
-        await ensureMinDuration(step10Start);
+        const step9Start = Date.now();
+        await ensureMinDuration(step9Start);
         controller.enqueue(
           encoder.encode(`data: ${JSON.stringify({ done: true })}\n\n`),
         );
