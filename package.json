@@ -25,7 +25,7 @@
 		"local:db": "pnpm run db:start",
 		"local:server": "pnpm run dev",
 		"local": "pnpm run --stream \"/^local:.*/\"",
-		"deploy": "netlify deploy --no-build --site skywrapped"
+		"deploy": "netlify deploy --no-build --prod --site skywrapped"
 	},
 	"devDependencies": {
 		"@atproto-labs/handle-resolver-node": "^0.1.21",
