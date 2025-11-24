@@ -1,6 +1,7 @@
 import { isNotNil } from "$lib/utils";
 import type {
   AppBskyActorDefs,
+  AppBskyEmbedImages,
   AppBskyEmbedRecord,
   AppBskyEmbedRecordWithMedia,
   AppBskyFeedDefs,
@@ -31,7 +32,7 @@ export const calculateWrapped = async ({
 }): Promise<Wrapped> => {
   const current = calculateCurrent(profile, feed);
   const bestTime = calculateBestTime(feed);
-  const { yearActivity, engagement } = calculateYearActivityAndEngagement(
+  const { yearActivity, engagement, topPost, languages } = getDataFromFeed(
     feed,
     likes,
     bookmarks,
@@ -46,6 +47,8 @@ export const calculateWrapped = async ({
     bestTime,
     yearActivity,
     engagement,
+    topPost,
+    languages,
   };
 };
 
@@ -156,13 +159,134 @@ const isQuotePost = (post: FeedViewPost): boolean => {
   return false;
 };
 
-const calculateYearActivityAndEngagement = (
+/**
+ * Extract the first image URL from a post's embed, if present.
+ * Handles both direct image embeds and record-with-media embeds.
+ */
+const getFirstImage = (
+  post: FeedViewPost,
+):
+  | {
+      url: string;
+      alt: string;
+      aspectRatio?: { width: number; height: number };
+    }
+  | undefined => {
+  const embed = post.post.embed;
+  if (!embed) {
+    return undefined;
+  }
+
+  // Check for direct images embed: app.bsky.embed.images#view
+  if (embed.$type === "app.bsky.embed.images#view") {
+    const imagesEmbed = embed as AppBskyEmbedImages.View;
+    const image = imagesEmbed.images?.[0];
+    if (image) {
+      return {
+        url: image.thumb,
+        alt: image.alt,
+        aspectRatio: image.aspectRatio,
+      };
+    }
+  }
+
+  // Check for record with media embed: app.bsky.embed.recordWithMedia#view
+  if (embed.$type === "app.bsky.embed.recordWithMedia#view") {
+    const recordWithMediaEmbed = embed as AppBskyEmbedRecordWithMedia.View;
+    const media = recordWithMediaEmbed.media;
+
+    // Check if media is images
+    if (media.$type === "app.bsky.embed.images#view") {
+      const imagesMedia = media as AppBskyEmbedImages.View;
+      const image = imagesMedia.images?.[0];
+      if (image) {
+        return {
+          url: image.thumb,
+          alt: image.alt,
+          aspectRatio: image.aspectRatio,
+        };
+      }
+    }
+  }
+
+  return undefined;
+};
+
+const toTopPost = (post: FeedViewPost): NonNullable<Wrapped["topPost"]> => {
+  // Text is stored in the record property according to Bluesky Lexicon
+  const record =
+    post.post.record.$type === "app.bsky.feed.post"
+      ? (post.post.record as { text?: string }).text
+      : "";
+  const text = record ?? "";
+
+  return {
+    link: post.post.uri
+      .replace("at://", "https://bsky.app/profile/")
+      .replace("/app.bsky.feed.post/", "/post/"),
+    text,
+    image: getFirstImage(post),
+    likes: post.post.likeCount ?? 0,
+    reposts: (post.post.repostCount ?? 0) + (post.post.quoteCount ?? 0),
+  };
+};
+
+const getTopPost = (
+  post: FeedViewPost,
+  currentTop: Wrapped["topPost"],
+): Wrapped["topPost"] => {
+  if (
+    post.reason?.$type === "app.bsky.feed.defs#reasonRepost" ||
+    isQuotePost(post)
+  ) {
+    return currentTop;
+  }
+
+  const transformedPost = toTopPost(post);
+
+  if (!currentTop) {
+    return transformedPost;
+  }
+
+  const totalCurrentPost = currentTop.likes + currentTop.reposts;
+  const totalTransformedPost = transformedPost.likes + transformedPost.reposts;
+
+  if (totalTransformedPost > totalCurrentPost) {
+    return transformedPost;
+  }
+
+  return currentTop;
+};
+
+const getLanguages = (
+  post: FeedViewPost,
+  languages: Record<string, number>,
+): Record<string, number> => {
+  const langs =
+    post.post.record.$type === "app.bsky.feed.post"
+      ? ((post.post.record as { langs?: string[] }).langs ?? [])
+      : [];
+  if (!langs.length) {
+    languages.all = (languages.all ?? 0) + 1;
+    return languages;
+  }
+
+  return langs.reduce((acc, code) => {
+    acc[code] = (acc[code] ?? 0) + 1;
+    acc.all = (acc.all ?? 0) + 1;
+    return acc;
+  }, languages);
+};
+
+const getDataFromFeed = (
   feed: FeedViewPost[],
   likes: FeedViewPost[],
   bookmarks: FeedViewPost[],
 ): {
   yearActivity: Wrapped["yearActivity"];
   engagement: Wrapped["engagement"];
+  topPost: Wrapped["topPost"];
+  languages: Wrapped["languages"];
 } => {
   let posts = feed.length;
   let replies = 0;
@@ -174,6 +298,9 @@ const calculateYearActivityAndEngagement = (
   let engagementQuotes = 0;
   let engagementLikes = 0;
   let engagementBookmarks = 0;
+
+  let topPost: Wrapped["topPost"];
+  let languagesRecord: Record<string, number> = { all: 0 };
 
   for (const post of feed) {
     // Check reposts first (these are not original posts)
@@ -210,7 +337,23 @@ const calculateYearActivityAndEngagement = (
     if (post.post.bookmarkCount && post.post.bookmarkCount > 0) {
       engagementBookmarks++;
     }
+
+    topPost = getTopPost(post, topPost);
+    languagesRecord = getLanguages(post, languagesRecord);
   }
+
+  const allWithLanguage = languagesRecord.all;
+  const languageNames = new Intl.DisplayNames(["en"], {
+    type: "language",
+  });
+  delete languagesRecord.all;
+  const languages = Object.entries(languagesRecord)
+    .map(([code, count]) => ({
+      code,
+      name: languageNames.of(code) ?? code,
+      percentage: Math.round((count / allWithLanguage) * 100),
+    }))
+    .sort((a, b) => b.percentage - a.percentage);
 
   return {
     yearActivity: {
@@ -228,5 +371,7 @@ const calculateYearActivityAndEngagement = (
       likes: engagementLikes,
       bookmarks: engagementBookmarks,
     },
+    topPost,
+    languages: languages,
   };
 };

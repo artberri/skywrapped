@@ -29,4 +29,23 @@ export interface Wrapped {
     readonly likes: number;
     readonly bookmarks: number;
   };
+  readonly topPost?: {
+    readonly link: string;
+    readonly text: string;
+    readonly image?: {
+      readonly url: string;
+      readonly alt: string;
+      readonly aspectRatio?: {
+        readonly width: number;
+        readonly height: number;
+      };
+    };
+    readonly likes: number;
+    readonly reposts: number;
+  };
+  readonly languages: {
+    readonly code: string;
+    readonly name: string;
+    readonly percentage: number;
+  }[];
 }

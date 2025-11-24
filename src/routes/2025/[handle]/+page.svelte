@@ -5,7 +5,9 @@
 	import IntroSlide from "$lib/components/slides/IntroSlide.svelte";
 	import OutroSlide from "$lib/components/slides/OutroSlide.svelte";
 	import ProfileOverviewSlide from "$lib/components/slides/ProfileOverviewSlide.svelte";
+	import TopPostSlide from "$lib/components/slides/TopPostSlide.svelte";
 	import YourActivitySlide from "$lib/components/slides/YourActivitySlide.svelte";
+	import LanguagesSlide from "$lib/components/slides/LanguagesSlide.svelte";
 	import { cn, downloadElementAsImage } from "$lib/utils";
 	import { ChevronLeft, ChevronRight, Download } from '@lucide/svelte';
 	import type { TouchEventHandler } from "svelte/elements";
@@ -14,21 +16,24 @@
   let { data }: PageProps = $props();
   let { wrapped } = data;
 
-  let slides = [
-    { id: 1, type: 'intro', gradient: 'sky', component: IntroSlide },
-    { id: 2, type: 'profile-overview', gradient: 'dawn', component: ProfileOverviewSlide },
-    { id: 3, type: 'your-activity', gradient: 'sunset', component: YourActivitySlide },
-    { id: 4, type: 'best-time', gradient: 'midnight', component: BestTimeSlide },
-    { id: 5, type: 'engagement', gradient: 'ocean', component: EngagementSlide },
-    { id: 5, type: 'outro', gradient: 'sunset', component: OutroSlide },
-  ] as const;
+  let allSlides = $derived([
+    { type: 'intro', gradient: 'sky', component: IntroSlide, show: true },
+    { type: 'profile-overview', gradient: 'dawn', component: ProfileOverviewSlide, show: true },
+    { type: 'your-activity', gradient: 'sunset', component: YourActivitySlide, show: true },
+    { type: 'languages', gradient: 'ocean', component: LanguagesSlide, show: wrapped.languages.length > 0 ? true : false },
+    { type: 'best-time', gradient: 'midnight', component: BestTimeSlide, show: true },
+    { type: 'engagement', gradient: 'ocean', component: EngagementSlide, show: true },
+    { type: 'top-post', gradient: 'sky', component: TopPostSlide, show: wrapped.topPost ? true : false },
+    { type: 'outro', gradient: 'sunset', component: OutroSlide, show: true },
+  ] as const);
+  let slides = $derived(allSlides.filter((slide) => slide.show));
 
   let currentSlide = $state(0);
   let slideContainer: HTMLDivElement | undefined = undefined;
   let gradientStyles = {
-    sky: 'bg-gradient-to-br from-[hsl(206,85%,45%)] to-[hsl(268,60%,50%)]',
+    sky: 'bg-gradient-to-br from-[hsl(206,100%,50%)] to-[hsl(268,70%,65%)]',
     sunset: 'bg-gradient-to-b from-[hsl(340,80%,65%)] via-[hsl(268,70%,65%)] to-[hsl(206,100%,50%)]',
-    dawn: 'bg-gradient-to-b from-[hsl(206,100%,50%)] via-[hsl(195,85%,60%)] to-[hsl(50,100%,75%)]',
+    dawn: 'bg-gradient-to-b from-[hsl(206,100%,50%)] via-[hsl(200,90%,55%)] to-[hsl(195,85%,60%)]',
     midnight: 'bg-gradient-to-br from-[hsl(230,40%,20%)] to-[hsl(268,50%,30%)]',
     ocean: 'bg-gradient-to-br from-[hsl(190,85%,40%)] via-[hsl(210,80%,50%)] to-[hsl(240,70%,55%)]',
   };
