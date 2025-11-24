@@ -1,8 +1,8 @@
 import { dev } from "$app/environment";
 import { env } from "$env/dynamic/private";
 import { LOG_LEVEL } from "$env/static/private";
-import { createClient } from "@libsql/client";
-import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client/web";
+import { drizzle } from "drizzle-orm/libsql/web";
 import * as schema from "./schema";
 
 if (!env.DATABASE_URL) {

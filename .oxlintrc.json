@@ -146,6 +146,6 @@
     "node_modules/**",
     ".cursor/**",
     ".svelte-kit/**",
-    ".wrangler/**"
+    ".netlify/**"
   ]
 }

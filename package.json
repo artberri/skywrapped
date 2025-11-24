@@ -25,7 +25,7 @@
 		"local:db": "pnpm run db:start",
 		"local:server": "pnpm run dev",
 		"local": "pnpm run --stream \"/^local:.*/\"",
-		"deploy": "wrangler deploy"
+		"deploy": "netlify deploy --no-build --site skywrapped"
 	},
 	"devDependencies": {
 		"@atproto-labs/handle-resolver-node": "^0.1.21",
@@ -33,7 +33,7 @@
 		"@atproto/oauth-client-node": "^0.3.10",
 		"@libsql/client": "^0.15.15",
 		"@lucide/svelte": "^0.554.0",
-		"@sveltejs/adapter-cloudflare": "^7.2.4",
+		"@sveltejs/adapter-netlify": "^5.2.4",
 		"@sveltejs/kit": "^2.49.0",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@tailwindcss/forms": "^0.5.10",
@@ -45,6 +45,7 @@
 		"drizzle-orm": "^0.44.6",
 		"html2canvas-pro": "^1.5.13",
 		"iron-session": "^8.0.4",
+		"netlify-cli": "^23.11.1",
 		"oxfmt": "^0.14.0",
 		"oxlint": "^1.29.0",
 		"oxlint-tsgolint": "^0.8.1",
@@ -56,7 +57,6 @@
 		"tailwindcss": "^4.1.14",
 		"typescript": "^5.9.3",
 		"vite": "^7.2.4",
-		"wrangler": "^4.50.0",
 		"zod": "^3.25.76"
 	}
 }
