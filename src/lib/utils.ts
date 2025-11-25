@@ -76,6 +76,61 @@ function waitForImages(element: HTMLElement): Promise<void> {
 }
 
 /**
+ * Adds a watermark text at the bottom of an image
+ * @param imageDataUrl - The data URL of the image
+ * @param watermarkText - The text to add as watermark
+ * @returns A new data URL with the watermark added
+ */
+async function addWatermark(imageDataUrl: string, watermarkText: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        reject(new Error("Could not get canvas context"));
+        return;
+      }
+
+      // Set canvas dimensions (same as image)
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      // Draw the original image
+      ctx.drawImage(img, 0, 0);
+
+      // Configure text style
+      const fontSize = Math.max(16, img.width / 24); // Responsive font size
+      ctx.font = `${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.7)"; // Semi-transparent white
+      ctx.textAlign = "center";
+      ctx.textBaseline = "bottom";
+
+      // Add a subtle shadow for better visibility
+      ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 1;
+
+      // Calculate position (bottom center with padding)
+      const padding = fontSize * 1.5;
+      const x = canvas.width / 2;
+      const y = canvas.height - padding;
+
+      // Draw the watermark text
+      ctx.fillText(watermarkText, x, y);
+
+      // Convert canvas to data URL
+      resolve(canvas.toDataURL("image/png"));
+    };
+    img.onerror = () => {
+      reject(new Error("Failed to load image for watermark"));
+    };
+    img.src = imageDataUrl;
+  });
+}
+
+/**
  * Captures a DOM element as an image and downloads it
  * @param element - The HTML element to capture
  * @param filename - The filename for the downloaded image (without extension)
@@ -146,9 +201,12 @@ export async function downloadElementAsImage(
       classes.forEach((cls) => el.classList.add(cls));
     });
 
+    // Add watermark text at the bottom
+    const finalDataUrl = await addWatermark(dataUrl, "skywrapped.app");
+
     // Create download link
     const link = document.createElement("a");
-    link.href = dataUrl;
+    link.href = finalDataUrl;
     link.download = `${filename}.png`;
     document.body.appendChild(link);
     link.click();

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import type { Wrapped } from '$lib/server/domain/wrapped';
-	import { BadgePlus, Check, Copy, Share2, Sparkles } from '@lucide/svelte';
+	import { Check, CirclePlus, Copy, Share, Share2, Sparkles } from '@lucide/svelte';
 	import Butterfly from '../Butterfly.svelte';
 	import Button from '../Button.svelte';
 	import Cloud from '../Cloud.svelte';
@@ -10,16 +10,23 @@
     wrapped: Wrapped;
   }
 
-  let { wrapped }: PageProps = $props();
+  let { wrapped: _ }: PageProps = $props();
 
   let copied = $state(false);
 
   const handleShareBluesky = () => {
-    console.log("Share on Bluesky");
+    const shareUrl = window.location.href;
+    const texts = [`Check out my Bluesky Wrapped! 🦋`, `My Bluesky Wrapped just dropped 🦋✨`];
+    const text = texts[Math.floor(Math.random() * texts.length)];
+    const blueskyShareUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text + " " + shareUrl)}`;
+    window.open(blueskyShareUrl, "_blank", "noopener,noreferrer");
   };
 
   const handleCopyLink = () => {
-    console.log("Copy link");
+    const shareUrl = window.location.href;
+    navigator.clipboard.writeText(shareUrl);
+    copied = true;
+    setTimeout(() => copied = false, 2000);
   };
 
   const handleCreateYourOwn = () => {
@@ -58,7 +65,7 @@
           onclick={handleShareBluesky}
           class="pointer-events-auto relative z-50 bg-gradient-to-r from-[hsl(206,100%,50%)] to-[hsl(268,70%,65%)] hover:from-[hsl(206,100%,45%)] hover:to-[hsl(268,70%,60%)] text-white border-1 border-white/50 h-12 flex-1 sm:flex-initial font-semibold shadow-xl hover:scale-105 transition-all duration-300"
         >
-          <Share2 class="w-5 h-5 mr-2" />
+          <Share class="w-5 h-5 mr-2" />
           Share on Bluesky
         </Button>
 
@@ -79,7 +86,7 @@
           onclick={handleCreateYourOwn}
           class="pointer-events-auto relative z-50 bg-white hover:bg-white/95 text-[hsl(268,70%,55%)] border-2 border-white h-12 flex-1 sm:flex-initial font-semibold shadow-lg hover:scale-105 transition-all duration-300"
         >
-          <BadgePlus class="w-5 h-5 mr-2" />
+          <CirclePlus class="w-5 h-5 mr-2" />
           Create your own!
         </Button>
       </div>

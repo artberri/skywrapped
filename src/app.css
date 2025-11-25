@@ -107,6 +107,10 @@
   a {
     @apply underline;
   }
+
+  button {
+    @apply cursor-pointer;
+  }
 }
 
 @layer utilities {
