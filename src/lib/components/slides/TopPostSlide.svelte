@@ -56,7 +56,7 @@
           href="{topPost?.link}"
           target="_blank"
           rel="noopener noreferrer"
-          class="absolute bottom-0 right-0 p-2 bg-white/20 hover:bg-white/30 rounded-full border border-white/30 backdrop-blur-md transition-colors group"
+          class="pointer-events-auto absolute bottom-0 right-0 p-2 bg-white/20 hover:bg-white/30 rounded-full border border-white/30 backdrop-blur-md transition-colors group"
           aria-label="View post on Bluesky"
         >
           <ExternalLink class="w-4 h-4 text-white" />

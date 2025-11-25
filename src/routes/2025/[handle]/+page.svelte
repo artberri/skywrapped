@@ -107,7 +107,7 @@
       <ProgressBar total={slides.length} current={currentSlide} />
     </div>
 
-    <div class="w-full h-full">
+    <div class="w-full h-full z-15 pointer-events-none">
       <CurrentSlideComponent wrapped={wrapped} />
     </div>
 
@@ -133,7 +133,7 @@
       {/if}
     </div>
 
-    <div class="md:hidden absolute inset-0 z-10 flex" data-ui-overlay>
+    <div class="md:hidden absolute inset-0 z-0 flex" data-ui-overlay>
       <button
         onclick={prevSlide}
         class="flex-1"
