@@ -38,7 +38,7 @@
     </div>
 
     <p class="text-base md:text-lg text-white/70 animate-fade-in" style:animation-delay="0.6s">
-      Let's soar through your journey
+      Let's look back together
     </p>
   </div>
 </div>

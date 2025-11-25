@@ -86,7 +86,7 @@
 
       <div class="pt-4 border-t border-white/20">
         <p class="text-sm md:text-base text-white/90">
-          Powered by <a href="https://bsky.app/profile/albertovarela.net" class="text-white/90 hover:text d-white">@albertovarela.net</a>
+          Built by <a target="_blank" rel="noopener noreferrer" href="https://bsky.app/profile/albertovarela.net" class="text-white/90 hover:text d-white">@albertovarela.net</a>
         </p>
       </div>
     </div>

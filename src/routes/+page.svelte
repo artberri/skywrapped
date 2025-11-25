@@ -74,7 +74,7 @@
       </form>
 
       <p class="text-white/70 text-sm">
-        No kitties were harmed in the making of this website. Built by <a href="https://bsky.app/profile/albertovarela.net" class="text-white/90 hover:text d-white">@albertovarela.net</a>.
+        No kitties were harmed in the making of this website. Built by <a target="_blank" rel="noopener noreferrer" href="https://bsky.app/profile/albertovarela.net" class="text-white/90 hover:text d-white">@albertovarela.net</a>.
       </p>
     </div>
   </div>

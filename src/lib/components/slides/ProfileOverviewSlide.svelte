@@ -20,10 +20,10 @@
   <div class="relative z-10 text-center space-y-8 max-w-3xl w-full">
     <div class="space-y-3 animate-fade-in">
       <h2 class="text-4xl md:text-5xl font-bold text-white mb-2">
-        First, let's look at
+        First of all,
       </h2>
       <p class="text-2xl md:text-3xl text-white/90">
-        where you stand today
+        here’s where you stand today
       </p>
     </div>
 

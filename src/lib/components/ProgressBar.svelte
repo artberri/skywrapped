@@ -14,10 +14,10 @@
     <div
       class={cn(
         "h-1 flex-1 rounded-full transition-all duration-300",
-        index < current
+        index < current || current === (total - 1)
           ? "bg-white"
           : index === current
-          ? "bg-white/50"
+          ? "bg-white/70"
           : "bg-white/20"
       )}
     ></div>
