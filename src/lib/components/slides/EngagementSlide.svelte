@@ -11,8 +11,8 @@
 </script>
 
 <div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
-  <Butterfly class="absolute top-12 right-8 animate-float" size="md" />
-  <Butterfly class="absolute bottom-16 left-8 animate-float" size="sm" style="animation-delay: 2s" />
+  <Butterfly class="absolute top-12 right-8 text-white animate-float" size="md" />
+  <Butterfly class="absolute bottom-16 left-8 text-white animate-float" size="sm" style="animation-delay: 2s" />
 
   <div class="relative z-10 text-center space-y-6 md:space-y-8 max-w-5xl w-full">
     <div class="space-y-2 animate-fade-in">
