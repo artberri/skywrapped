@@ -1,5 +1,4 @@
 <script lang="ts">
-	import favicon from '$lib/assets/favicon.svg';
 	import { onMount } from 'svelte';
 	import '../app.css';
 
@@ -15,7 +14,12 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href="/favicon.ico" sizes="32x32">
+	<link rel="icon" href="/icon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+	<title>Sky Wrapped - Your year on Bluesky</title>
+	<meta name="description" content="Get your Bluesky Wrapped! Discover your personalized year in review with top posts, favorite moments, and social stats from your Bluesky activity.">
+	<meta name="keywords" content="skywrapped, wrapped, bluesky">
 </svelte:head>
 
 {@render children()}
