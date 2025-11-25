@@ -53,18 +53,21 @@
         }
 
         const timeSinceLastData = Date.now() - lastDataReceived;
-        if (timeSinceLastData >= 300) {
+        if (timeSinceLastData >= 400) {
           // Increment by random amount between 15-20%
           const increment = Math.random() * 5 + 15; // 15 to 20
-          const newProgress = Math.min(progress + increment, MAX_FAKE_PROGRESS);
+          const newProgress = Math.round(Math.min(progress + increment, MAX_FAKE_PROGRESS));
           progress = newProgress;
           // Update message based on new progress
           message = getMessageForProgress(newProgress);
         }
-      }, 300);
+      }, 400);
     };
 
     try {
+      // Start the fallback progress mechanism
+      startFakeProgress();
+
       const response = await fetch("/api/calculate");
       if (!response.ok) {
         // If unauthorized, redirect to home
@@ -74,9 +77,6 @@
         }
         throw new Error("Failed to start calculation");
       }
-
-      // Start the fallback progress mechanism
-      startFakeProgress();
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();

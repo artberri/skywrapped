@@ -38,21 +38,18 @@ export const actions: Actions = {
       url = await ctx.oauthClient.authorize(sanitizeHandle(handle));
     } catch (err) {
       const error = ensureError(err);
-      return fail(400, {
-        error: error.message + "|" + error.stack,
-      });
-      // if (error.includes("Failed to resolve identity")) {
-      //   return fail(400, {
-      //     error:
-      //       "Please enter a valid Bluesky handle (e.g., @username.bsky.social)",
-      //   });
-      // }
+      if (error.message.includes("Failed to resolve identity")) {
+        return fail(400, {
+          error:
+            "Please enter a valid Bluesky handle (e.g., @username.bsky.social)",
+        });
+      }
 
-      // const errorMessage =
-      //   err instanceof Error ? err.message : "Unexpected error";
-      // ctx.logger.warn({ error }, "OAuth authorize failed");
+      const errorMessage =
+        err instanceof Error ? err.message : "Unexpected error";
+      ctx.logger.warn({ error }, "OAuth authorize failed");
 
-      // return fail(400, { error: errorMessage });
+      return fail(400, { error: errorMessage });
     }
 
     // Redirect to the OAuth authorization URL
