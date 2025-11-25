@@ -12,6 +12,58 @@
   let { handle } = data;
 
   onMount(async () => {
+    let lastDataReceived = Date.now();
+    let fakeProgressInterval: ReturnType<typeof setInterval> | null = null;
+    let isRequestComplete = false;
+    const MAX_FAKE_PROGRESS = 95; // Never exceed this with fake progress
+
+    // Messages from the server, matching progress thresholds
+    const progressMessages = [
+      { threshold: 0, message: "Analyzing your posts..." },
+      { threshold: 14, message: "Analyzing your posts..." },
+      { threshold: 28, message: "Counting your followers..." },
+      { threshold: 42, message: "Finding your top moments..." },
+      { threshold: 57, message: "Calculating engagement..." },
+      { threshold: 69, message: "Counting your likes..." },
+      { threshold: 81, message: "Counting your bookmarks..." },
+      { threshold: 92, message: "Wrapping up your year..." },
+      { threshold: 100, message: "Saving your wrapped..." },
+    ];
+
+    // Get message based on current progress
+    const getMessageForProgress = (currentProgress: number): string => {
+      // Find the highest threshold that is <= currentProgress
+      for (let i = progressMessages.length - 1; i >= 0; i--) {
+        if (currentProgress >= progressMessages[i].threshold) {
+          return progressMessages[i].message;
+        }
+      }
+      return progressMessages[0].message;
+    };
+
+    // Fallback progress mechanism
+    const startFakeProgress = () => {
+      fakeProgressInterval = setInterval(() => {
+        if (isRequestComplete) {
+          if (fakeProgressInterval) {
+            clearInterval(fakeProgressInterval);
+            fakeProgressInterval = null;
+          }
+          return;
+        }
+
+        const timeSinceLastData = Date.now() - lastDataReceived;
+        if (timeSinceLastData >= 300) {
+          // Increment by random amount between 15-20%
+          const increment = Math.random() * 5 + 15; // 15 to 20
+          const newProgress = Math.min(progress + increment, MAX_FAKE_PROGRESS);
+          progress = newProgress;
+          // Update message based on new progress
+          message = getMessageForProgress(newProgress);
+        }
+      }, 300);
+    };
+
     try {
       const response = await fetch("/api/calculate");
       if (!response.ok) {
@@ -22,6 +74,9 @@
         }
         throw new Error("Failed to start calculation");
       }
+
+      // Start the fallback progress mechanism
+      startFakeProgress();
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
@@ -35,7 +90,17 @@
       while (true) {
         const { done, value } = await reader.read();
 
-        if (done) break;
+        if (done) {
+          isRequestComplete = true;
+          progress = 100; // Set to 100% on completion
+          if (fakeProgressInterval) {
+            clearInterval(fakeProgressInterval);
+            fakeProgressInterval = null;
+          }
+          break;
+        }
+
+        lastDataReceived = Date.now(); // Update timestamp when data is received
 
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split("\n");
@@ -48,6 +113,12 @@
               const parsed = JSON.parse(data);
 
               if (parsed.done) {
+                isRequestComplete = true;
+                progress = 100; // Set to 100% on completion
+                if (fakeProgressInterval) {
+                  clearInterval(fakeProgressInterval);
+                  fakeProgressInterval = null;
+                }
                 // Calculation complete, redirect or show success
                 goto(`/2025/${handle}`);
                 return;
@@ -55,6 +126,11 @@
 
               if (parsed.error) {
                 console.error("Calculation error:", parsed.error);
+                isRequestComplete = true;
+                if (fakeProgressInterval) {
+                  clearInterval(fakeProgressInterval);
+                  fakeProgressInterval = null;
+                }
                 goto("/error");
                 return;
               }
@@ -62,7 +138,8 @@
               if (parsed.step !== undefined && parsed.message && parsed.progress !== undefined) {
                 // Ensure messageIndex stays within bounds
                 message = parsed.message;
-                progress = parsed.progress;
+                progress = parsed.progress; // Real progress from server overrides fake progress
+                lastDataReceived = Date.now(); // Update timestamp
               }
             } catch (e) {
               console.error("Failed to parse SSE data:", e);
@@ -72,6 +149,11 @@
       }
     } catch (error) {
       console.error("Error during calculation:", error);
+      isRequestComplete = true;
+      if (fakeProgressInterval) {
+        clearInterval(fakeProgressInterval);
+        fakeProgressInterval = null;
+      }
       goto("/error");
     }
   });
