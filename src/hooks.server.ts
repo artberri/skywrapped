@@ -9,7 +9,9 @@ let ctx: AppContext | undefined;
 let ctxPromise: Promise<AppContext> | undefined;
 
 async function getContext(): Promise<AppContext> {
-  if (ctx) return ctx;
+  if (ctx) {
+    return ctx;
+  }
   if (!ctxPromise) {
     ctxPromise = createAppContext().then((context) => {
       ctx = context;

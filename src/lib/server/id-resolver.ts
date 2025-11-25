@@ -15,7 +15,9 @@ export function createBidirectionalResolver({
     async resolveDidToHandle(did: string): Promise<string | undefined> {
       try {
         const { handle } = await identityResolver.resolve(did);
-        if (handle) return handle;
+        if (handle) {
+          return handle;
+        }
       } catch {
         // Ignore
       }
@@ -38,7 +40,9 @@ export function createBidirectionalResolver({
     async resolveHandleToDid(handle: string): Promise<string | undefined> {
       try {
         const { did } = await identityResolver.resolve(handle);
-        if (did) return did;
+        if (did) {
+          return did;
+        }
       } catch {
         // Ignore
       }

@@ -191,7 +191,9 @@ export class BlueskyClient {
       // Check if we've reached bookmarks from a previous year
       let foundPreviousYear = false;
       for (const bookmark of bookmarks) {
-        if (!bookmark.createdAt) continue;
+        if (!bookmark.createdAt) {
+          continue;
+        }
 
         const bookmarkDate = new Date(bookmark.createdAt);
         const bookmarkYear = bookmarkDate.getFullYear();

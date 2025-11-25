@@ -2,8 +2,10 @@
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit",
+    "source.fixAll.oxfmt": "explicit",
+    "source.fixAll.oxlint": "explicit"
   },
   "oxc.enable": true,
   "oxc.typeAware": true,
-  "oxc.fmt.experimental": true
+  "oxc.fmt.experimental": true,
 }

@@ -3,11 +3,11 @@
 	import BestTimeSlide from "$lib/components/slides/BestTimeSlide.svelte";
 	import EngagementSlide from "$lib/components/slides/EngagementSlide.svelte";
 	import IntroSlide from "$lib/components/slides/IntroSlide.svelte";
+	import LanguagesSlide from "$lib/components/slides/LanguagesSlide.svelte";
 	import OutroSlide from "$lib/components/slides/OutroSlide.svelte";
 	import ProfileOverviewSlide from "$lib/components/slides/ProfileOverviewSlide.svelte";
 	import TopPostSlide from "$lib/components/slides/TopPostSlide.svelte";
 	import YourActivitySlide from "$lib/components/slides/YourActivitySlide.svelte";
-	import LanguagesSlide from "$lib/components/slides/LanguagesSlide.svelte";
 	import { cn, downloadElementAsImage } from "$lib/utils";
 	import { ChevronLeft, ChevronRight, Download } from '@lucide/svelte';
 	import type { TouchEventHandler } from "svelte/elements";
@@ -44,39 +44,31 @@
   let nextSlide = () => {
     if (currentSlide < slides.length - 1) {
       currentSlide = currentSlide + 1;
-      console.log("nextSlide");
     }
   };
 
   let prevSlide = () => {
     if (currentSlide > 0) {
       currentSlide = currentSlide - 1;
-      console.log("prevSlide");
     }
   };
 
   let handleTouchStart: TouchEventHandler<HTMLDivElement> = (e) => {
     touchStart = e.targetTouches[0].clientX;
     touchEnd = 0
-    console.log("touchStart", touchStart);
   };
 
   let handleTouchMove: TouchEventHandler<HTMLDivElement> = (e) => {
     touchEnd = e.targetTouches[0].clientX;
-    console.log("touchEnd", touchEnd);
   };
 
   let handleTouchEnd = () => {
       if (touchStart - touchEnd > 75 && touchStart !== 0 && touchEnd !== 0) {
-        console.log("touchStart - touchEnd", touchStart - touchEnd);
-        console.log("nextSlide on touch end");
         nextSlide();
         touchStart = 0;
         touchEnd = 0;
       }
       if (touchStart - touchEnd < -75 && touchStart !== 0 && touchEnd !== 0) {
-        console.log("touchStart - touchEnd", touchStart - touchEnd);
-        console.log("prevSlide on touch end");
         prevSlide();
         touchStart = 0;
         touchEnd = 0;
@@ -84,23 +76,12 @@
   };
 
   let handleDownload = async () => {
-    if (!slideContainer) return;
-
-    // Hide UI overlays for cleaner capture
-    const uiElements = slideContainer.querySelectorAll('[data-ui-overlay]');
-    uiElements.forEach((el) => {
-      (el as HTMLElement).style.display = 'none';
-    });
-
-    try {
-      const slideName = `${wrapped.handle}-${currentSlideData.type}-${wrapped.year}`;
-      await downloadElementAsImage(slideContainer, slideName);
-    } finally {
-      // Restore UI overlays
-      uiElements.forEach((el) => {
-        (el as HTMLElement).style.display = '';
-      });
+    if (!slideContainer) {
+      return;
     }
+
+    const slideName = `${wrapped.handle}-${currentSlideData.type}-${wrapped.year}`;
+    await downloadElementAsImage(slideContainer, slideName);
   };
 
   let currentSlideData = $derived(slides[currentSlide]);

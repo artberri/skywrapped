@@ -25,12 +25,10 @@ export const isNotNil = <T>(value: T | null | undefined): value is T => {
  * Captures a DOM element as an image and downloads it
  * @param element - The HTML element to capture
  * @param filename - The filename for the downloaded image (without extension)
- * @param options - Optional html2canvas configuration
  */
 export async function downloadElementAsImage(
   element: HTMLElement,
-  filename: string = "slide",
-  options?: Partial<Parameters<typeof html2canvas>[1]>,
+  filename: string,
 ): Promise<void> {
   try {
     // Wait a bit for any animations to settle
@@ -40,9 +38,37 @@ export async function downloadElementAsImage(
     const canvas = await html2canvas(element, {
       backgroundColor: null,
       scale: 2, // Higher quality
-      useCORS: true,
+      useCORS: false,
       logging: false,
-      ...options,
+      allowTaint: true,
+      onclone: (doc) => {
+        const allElements = doc.querySelectorAll("*");
+        allElements.forEach((el) => {
+          el.classList.remove(
+            "animate-scale-in",
+            "animate-fade-in",
+            "animate-float",
+            "animate-float-delayed",
+            "animate-drift",
+          );
+        });
+        var svgElements = doc.querySelectorAll("svg");
+        svgElements.forEach(function (item) {
+          item.setAttribute(
+            "width",
+            item.getBoundingClientRect().width.toString(),
+          );
+          item.setAttribute(
+            "height",
+            item.getBoundingClientRect().height.toString(),
+          );
+          item.style.width = "";
+          item.style.height = "";
+        });
+      },
+      ignoreElements: (el) => {
+        return el.hasAttribute("data-ui-overlay");
+      },
     });
 
     // Convert canvas to blob
