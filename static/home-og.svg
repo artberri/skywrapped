@@ -1,0 +1,211 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 628" width="1200" height="628">
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="30%" y2="100%">
+      <stop offset="0%" style="stop-color:hsl(206,100%,50%);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:hsl(268,70%,65%);stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background gradient -->
+  <rect width="1200" height="628" fill="url(#skyGradient)"/>
+
+  <!-- Decorative clouds -->
+  <g transform="translate(890, 80)" opacity="0.7">
+    <path
+      d="M160 70C160 70 165 50 150 40C140 33 130 38 125 45C125 30 110 20 90 20C70 20 55 30 50 45C40 40 25 45 20 60C15 75 25 85 40 85H150C165 85 170 75 160 70Z"
+      fill="white"
+      opacity="0.8"
+    />
+  </g>
+  <g transform="translate(430, 50) scale(0.8)" opacity="0.5">
+    <path
+      d="M160 70C160 70 165 50 150 40C140 33 130 38 125 45C125 30 110 20 90 20C70 20 55 30 50 45C40 40 25 45 20 60C15 75 25 85 40 85H150C165 85 170 75 160 70Z"
+      fill="white"
+      opacity="0.8"
+    />
+  </g>
+  <g transform="translate(620, 480) scale(0.7)" opacity="0.7">
+    <path
+      d="M160 70C160 70 165 50 150 40C140 33 130 38 125 45C125 30 110 20 90 20C70 20 55 30 50 45C40 40 25 45 20 60C15 75 25 85 40 85H150C165 85 170 75 160 70Z"
+      fill="white"
+      opacity="0.8"
+    />
+  </g>
+  <g transform="translate(1020, 530) scale(0.5)" opacity="0.3">
+    <path
+      d="M160 70C160 70 165 50 150 40C140 33 130 38 125 45C125 30 110 20 90 20C70 20 55 30 50 45C40 40 25 45 20 60C15 75 25 85 40 85H150C165 85 170 75 160 70Z"
+      fill="white"
+      opacity="0.8"
+    />
+  </g>
+  <g transform="translate(1080, 340) scale(0.6)" opacity="0.5">
+    <path
+      d="M160 70C160 70 165 50 150 40C140 33 130 38 125 45C125 30 110 20 90 20C70 20 55 30 50 45C40 40 25 45 20 60C15 75 25 85 40 85H150C165 85 170 75 160 70Z"
+      fill="white"
+      opacity="0.8"
+    />
+  </g>
+  <g transform="translate(50, 30) scale(0.5)" opacity="0.6">
+    <path
+      d="M160 70C160 70 165 50 150 40C140 33 130 38 125 45C125 30 110 20 90 20C70 20 55 30 50 45C40 40 25 45 20 60C15 75 25 85 40 85H150C165 85 170 75 160 70Z"
+      fill="white"
+      opacity="0.8"
+    />
+  </g>
+  <g transform="translate(70, 360) scale(0.7)" opacity="0.5">
+    <path
+      d="M160 70C160 70 165 50 150 40C140 33 130 38 125 45C125 30 110 20 90 20C70 20 55 30 50 45C40 40 25 45 20 60C15 75 25 85 40 85H150C165 85 170 75 160 70Z"
+      fill="white"
+      opacity="0.8"
+    />
+  </g>
+  <g transform="translate(20, 530) scale(0.4)" opacity="0.7">
+    <path
+      d="M160 70C160 70 165 50 150 40C140 33 130 38 125 45C125 30 110 20 90 20C70 20 55 30 50 45C40 40 25 45 20 60C15 75 25 85 40 85H150C165 85 170 75 160 70Z"
+      fill="white"
+      opacity="0.8"
+    />
+  </g>
+
+
+  <!-- Butterflies -->
+  <g transform="translate(120, 180) rotate(-15) scale(1.2)" opacity="0.8">
+    <path
+      d="M30 50C30 50 15 35 20 20C25 5 40 15 45 30L50 50"
+      fill="white"
+      opacity="0.8"
+    />
+    <path
+      d="M70 50C70 50 85 35 80 20C75 5 60 15 55 30L50 50"
+      fill="white"
+      opacity="0.8"
+    />
+    <path
+      d="M30 50C30 50 10 60 15 80C20 95 40 85 45 65L50 50"
+      fill="white"
+      opacity="0.6"
+    />
+    <path
+      d="M70 50C70 50 90 60 85 80C80 95 60 85 55 65L50 50"
+      fill="white"
+      opacity="0.6"
+    />
+    <ellipse cx="50" cy="50" rx="3" ry="15" fill="white" />
+    <path
+      d="M50 35C48 30 46 25 45 20M50 35C52 30 54 25 55 20"
+      stroke="white"
+      stroke-width="1.5"
+      stroke-linecap="round"
+    />
+  </g>
+
+  <g transform="translate(310, 480) scale(0.6) rotate(5)" opacity="0.8">
+    <path
+      d="M30 50C30 50 15 35 20 20C25 5 40 15 45 30L50 50"
+      fill="white"
+      opacity="0.8"
+    />
+    <path
+      d="M70 50C70 50 85 35 80 20C75 5 60 15 55 30L50 50"
+      fill="white"
+      opacity="0.8"
+    />
+    <path
+      d="M30 50C30 50 10 60 15 80C20 95 40 85 45 65L50 50"
+      fill="white"
+      opacity="0.6"
+    />
+    <path
+      d="M70 50C70 50 90 60 85 80C80 95 60 85 55 65L50 50"
+      fill="white"
+      opacity="0.6"
+    />
+    <ellipse cx="50" cy="50" rx="3" ry="15" fill="white" />
+    <path
+      d="M50 35C48 30 46 25 45 20M50 35C52 30 54 25 55 20"
+      stroke="white"
+      stroke-width="1.5"
+      stroke-linecap="round"
+    />
+  </g>
+
+  <g transform="translate(870, 380) scale(0.7) rotate(20)" opacity="0.8">
+    <path
+      d="M30 50C30 50 15 35 20 20C25 5 40 15 45 30L50 50"
+      fill="white"
+      opacity="0.8"
+    />
+    <path
+      d="M70 50C70 50 85 35 80 20C75 5 60 15 55 30L50 50"
+      fill="white"
+      opacity="0.8"
+    />
+    <path
+      d="M30 50C30 50 10 60 15 80C20 95 40 85 45 65L50 50"
+      fill="white"
+      opacity="0.6"
+    />
+    <path
+      d="M70 50C70 50 90 60 85 80C80 95 60 85 55 65L50 50"
+      fill="white"
+      opacity="0.6"
+    />
+    <ellipse cx="50" cy="50" rx="3" ry="15" fill="white" />
+    <path
+      d="M50 35C48 30 46 25 45 20M50 35C52 30 54 25 55 20"
+      stroke="white"
+      stroke-width="1.5"
+      stroke-linecap="round"
+    />
+  </g>
+
+  <g transform="translate(770, 60) scale(0.7) rotate(3)" opacity="0.7">
+    <path
+      d="M30 50C30 50 15 35 20 20C25 5 40 15 45 30L50 50"
+      fill="white"
+      opacity="0.8"
+    />
+    <path
+      d="M70 50C70 50 85 35 80 20C75 5 60 15 55 30L50 50"
+      fill="white"
+      opacity="0.8"
+    />
+    <path
+      d="M30 50C30 50 10 60 15 80C20 95 40 85 45 65L50 50"
+      fill="white"
+      opacity="0.6"
+    />
+    <path
+      d="M70 50C70 50 90 60 85 80C80 95 60 85 55 65L50 50"
+      fill="white"
+      opacity="0.6"
+    />
+    <ellipse cx="50" cy="50" rx="3" ry="15" fill="white" />
+    <path
+      d="M50 35C48 30 46 25 45 20M50 35C52 30 54 25 55 20"
+      stroke="white"
+      stroke-width="1.5"
+      stroke-linecap="round"
+    />
+  </g>
+
+  <!-- Main text -->
+  <text x="600" y="280" font-family="Arial, sans-serif" font-size="96" font-weight="bold" fill="white" text-anchor="middle">
+    Sky Wrapped
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="350" font-family="Arial, sans-serif" font-size="36" fill="white" text-anchor="middle" opacity="0.95">
+    Your Year on Bluesky
+  </text>
+
+  <!-- Decorative line -->
+  <line x1="400" y1="380" x2="800" y2="380" stroke="white" stroke-width="2" opacity="0.8"/>
+</svg>

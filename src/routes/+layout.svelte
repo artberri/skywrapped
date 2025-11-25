@@ -20,6 +20,15 @@
 	<title>Sky Wrapped - Your year on Bluesky</title>
 	<meta name="description" content="Get your Bluesky Wrapped! Discover your personalized year in review with top posts, favorite moments, and social stats from your Bluesky activity.">
 	<meta name="keywords" content="skywrapped, wrapped, bluesky">
+	<meta property="og:title" content="Sky Wrapped - Your year on Bluesky">
+	<meta property="og:description" content="Get your Bluesky Wrapped! Discover your personalized year in review with top posts, favorite moments, and social stats from your Bluesky activity.">
+	<meta property="og:image" content="https://skywrapped.com/og-image.png">
+	<meta property="og:url" content="https://skywrapped.com">
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="Sky Wrapped">
+	<meta property="og:locale" content="en_US">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="628">
 </svelte:head>
 
 {@render children()}
