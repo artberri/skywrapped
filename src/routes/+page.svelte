@@ -29,8 +29,8 @@
   </div>
 
   <div class="relative z-10 flex flex-col items-center justify-center h-full px-4 md:px-8">
-    <div class="max-w-md w-full space-y-8 text-center">
-      <div class="flex justify-center mb-6">
+    <div class="max-w-md w-full space-y-6 text-center">
+      <div class="flex justify-center">
         <Butterfly size="lg" class="text-white animate-float" />
       </div>
 
@@ -73,9 +73,13 @@
         </Button>
       </form>
 
-      <p class="text-white/70 text-sm mt-8">
-        No kitties were harmed in the making of this website. Powered by <a href="https://bsky.app/profile/albertovarela.net" class="text-white/90 hover:text d-white">@albertovarela.net</a>.
+      <p class="text-white/70 text-sm">
+        No kitties were harmed in the making of this website. Built by <a href="https://bsky.app/profile/albertovarela.net" class="text-white/90 hover:text d-white">@albertovarela.net</a>.
       </p>
     </div>
   </div>
+
+  <p class="absolute z-20 bottom-0 text-center w-full text-white/70 text-xs mb-4">
+    <a href="/terms-of-service" class="text-white/90 hover:text d-white">Terms of Service</a> and <a href="/privacy-policy" class="text-white/90 hover:text d-white">Privacy Policy</a>.
+  </p>
 </div>
