@@ -2,8 +2,8 @@ ignoredBuiltDependencies:
   - core-js
 
 onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@tailwindcss/oxide'
+  - "@parcel/watcher"
+  - "@tailwindcss/oxide"
   - esbuild
   - netlify-cli
   - sharp

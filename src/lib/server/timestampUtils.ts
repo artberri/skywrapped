@@ -18,29 +18,29 @@ const CLOCK_SKEW_WINDOW_MS = 2 * 60 * 1000; // 2 minutes in milliseconds
  * @returns The most accurate Date, or null if neither timestamp is available
  */
 export function getSortAtTimestamp(
-  createdAt: string | undefined,
-  indexedAt: string | undefined,
+	createdAt: string | undefined,
+	indexedAt: string | undefined,
 ): Date | undefined {
-  const now = new Date();
-  const nowMs = now.getTime();
+	const now = new Date();
+	const nowMs = now.getTime();
 
-  // Determine which timestamp to use following sortAt logic
-  let bestTimestamp: Date | undefined;
+	// Determine which timestamp to use following sortAt logic
+	let bestTimestamp: Date | undefined;
 
-  if (createdAt) {
-    const createdAtDate = new Date(createdAt);
-    const createdAtMs = createdAtDate.getTime();
+	if (createdAt) {
+		const createdAtDate = new Date(createdAt);
+		const createdAtMs = createdAtDate.getTime();
 
-    // Use createdAt if it's not in the future (beyond clock skew window)
-    if (createdAtMs <= nowMs + CLOCK_SKEW_WINDOW_MS) {
-      bestTimestamp = createdAtDate;
-    }
-  }
+		// Use createdAt if it's not in the future (beyond clock skew window)
+		if (createdAtMs <= nowMs + CLOCK_SKEW_WINDOW_MS) {
+			bestTimestamp = createdAtDate;
+		}
+	}
 
-  // Fall back to indexedAt if createdAt is not available or is in the future
-  if (!bestTimestamp && indexedAt) {
-    bestTimestamp = new Date(indexedAt);
-  }
+	// Fall back to indexedAt if createdAt is not available or is in the future
+	if (!bestTimestamp && indexedAt) {
+		bestTimestamp = new Date(indexedAt);
+	}
 
-  return bestTimestamp;
+	return bestTimestamp;
 }

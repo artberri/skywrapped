@@ -3,11 +3,11 @@ import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ locals, setHeaders }) => {
-  const { ctx } = locals;
+	const { ctx } = locals;
 
-  setHeaders({
-    "cache-control": `max-age=${MAX_AGE}, public`,
-  });
+	setHeaders({
+		"cache-control": `max-age=${MAX_AGE}, public`,
+	});
 
-  return json(ctx.oauthClient.clientMetadata);
+	return json(ctx.oauthClient.clientMetadata);
 };

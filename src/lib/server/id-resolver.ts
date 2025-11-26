@@ -1,45 +1,45 @@
 import type { OAuthClient } from "@atproto/oauth-client-node";
 
 export interface BidirectionalResolver {
-  resolveDidToHandle(did: string): Promise<string | undefined>;
-  resolveDidsToHandles(dids: string[]): Promise<Record<string, string | undefined>>;
-  resolveHandleToDid(handle: string): Promise<string | undefined>;
+	resolveDidToHandle(did: string): Promise<string | undefined>;
+	resolveDidsToHandles(dids: string[]): Promise<Record<string, string | undefined>>;
+	resolveHandleToDid(handle: string): Promise<string | undefined>;
 }
 
 export function createBidirectionalResolver({
-  identityResolver,
+	identityResolver,
 }: OAuthClient): BidirectionalResolver {
-  return {
-    async resolveDidToHandle(did: string): Promise<string | undefined> {
-      try {
-        const { handle } = await identityResolver.resolve(did);
-        if (handle) {
-          return handle;
-        }
-      } catch {
-        // Ignore
-      }
-    },
+	return {
+		async resolveDidToHandle(did: string): Promise<string | undefined> {
+			try {
+				const { handle } = await identityResolver.resolve(did);
+				if (handle) {
+					return handle;
+				}
+			} catch {
+				// Ignore
+			}
+		},
 
-    async resolveDidsToHandles(dids: string[]): Promise<Record<string, string | undefined>> {
-      const uniqueDids = [...new Set(dids)];
+		async resolveDidsToHandles(dids: string[]): Promise<Record<string, string | undefined>> {
+			const uniqueDids = [...new Set(dids)];
 
-      return Object.fromEntries(
-        await Promise.all(
-          uniqueDids.map((did) => this.resolveDidToHandle(did).then((handle) => [did, handle])),
-        ),
-      );
-    },
+			return Object.fromEntries(
+				await Promise.all(
+					uniqueDids.map((did) => this.resolveDidToHandle(did).then((handle) => [did, handle])),
+				),
+			);
+		},
 
-    async resolveHandleToDid(handle: string): Promise<string | undefined> {
-      try {
-        const { did } = await identityResolver.resolve(handle);
-        if (did) {
-          return did;
-        }
-      } catch {
-        // Ignore
-      }
-    },
-  };
+		async resolveHandleToDid(handle: string): Promise<string | undefined> {
+			try {
+				const { did } = await identityResolver.resolve(handle);
+				if (did) {
+					return did;
+				}
+			} catch {
+				// Ignore
+			}
+		},
+	};
 }

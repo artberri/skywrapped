@@ -12,33 +12,33 @@ import { createBidirectionalResolver, type BidirectionalResolver } from "./id-re
  * Application state passed to the router and elsewhere
  */
 export type AppContext = {
-  db: Database;
-  logger: Logger;
-  oauthClient: NodeOAuthClient;
-  resolver: BidirectionalResolver;
-  wrappedRepository: WrappedRepository;
-  getBlueskyClient: (agent: Agent) => BlueskyClient;
-  destroy: () => Promise<void>;
+	db: Database;
+	logger: Logger;
+	oauthClient: NodeOAuthClient;
+	resolver: BidirectionalResolver;
+	wrappedRepository: WrappedRepository;
+	getBlueskyClient: (agent: Agent) => BlueskyClient;
+	destroy: () => Promise<void>;
 };
 
 export async function createAppContext(): Promise<AppContext> {
-  const db = createDb();
-  const oauthClient = await createOAuthClient(db);
-  const logger = pino({
-    name: "server",
-    level: LOG_LEVEL,
-  });
-  const resolver = createBidirectionalResolver(oauthClient);
+	const db = createDb();
+	const oauthClient = await createOAuthClient(db);
+	const logger = pino({
+		name: "server",
+		level: LOG_LEVEL,
+	});
+	const resolver = createBidirectionalResolver(oauthClient);
 
-  return {
-    db,
-    logger,
-    oauthClient,
-    resolver,
-    wrappedRepository: new DrizzleWrappedRepository(db),
-    getBlueskyClient: (agent: Agent) => new BlueskyClient(agent),
-    async destroy() {
-      db.$client.close();
-    },
-  };
+	return {
+		db,
+		logger,
+		oauthClient,
+		resolver,
+		wrappedRepository: new DrizzleWrappedRepository(db),
+		getBlueskyClient: (agent: Agent) => new BlueskyClient(agent),
+		async destroy() {
+			db.$client.close();
+		},
+	};
 }

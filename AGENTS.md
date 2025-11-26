@@ -13,6 +13,7 @@ ReadStack is a SvelteKit app which uses PNPM to manage packages
 Install **proto** (https://moonrepo.dev/proto) to synchronize all related tools (Node.js, Yarn, Terraform, etc.):
 
 Run:
+
 ```sh
 proto install
 pnpm install

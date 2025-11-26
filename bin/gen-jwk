@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-'use strict'
+"use strict";
 
-import { JoseKey } from '@atproto/oauth-client-node'
+import { JoseKey } from "@atproto/oauth-client-node";
 
 async function main() {
-  const kid = Date.now().toString()
-  const key = await JoseKey.generate(['ES256'], kid)
-  const jwk = key.privateJwk
+	const kid = Date.now().toString();
+	const key = await JoseKey.generate(["ES256"], kid);
+	const jwk = key.privateJwk;
 
-  console.log(JSON.stringify(jwk))
+	console.log(JSON.stringify(jwk));
 }
 
-main()
+main();
