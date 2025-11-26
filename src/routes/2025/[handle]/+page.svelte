@@ -2,6 +2,8 @@
 	import ProgressBar from "$lib/components/ProgressBar.svelte";
 	import BestTimeSlide from "$lib/components/slides/BestTimeSlide.svelte";
 	import EngagementSlide from "$lib/components/slides/EngagementSlide.svelte";
+	import HashtagsSlide from "$lib/components/slides/HashtagsSlide.svelte";
+	import InteractionsSlide from "$lib/components/slides/InteractionsSlide.svelte";
 	import IntroSlide from "$lib/components/slides/IntroSlide.svelte";
 	import LanguagesSlide from "$lib/components/slides/LanguagesSlide.svelte";
 	import OutroSlide from "$lib/components/slides/OutroSlide.svelte";
@@ -22,8 +24,10 @@
     { type: 'your-activity', gradient: 'sunset', component: YourActivitySlide, show: true },
     { type: 'languages', gradient: 'ocean', component: LanguagesSlide, show: wrapped.languages.length > 0 ? true : false },
     { type: 'best-time', gradient: 'midnight', component: BestTimeSlide, show: true },
+    { type: 'hashtags', gradient: 'sunset', component: HashtagsSlide, show: wrapped.hashtags.length > 0 ? true : false },
     { type: 'engagement', gradient: 'ocean', component: EngagementSlide, show: true },
-    { type: 'top-post', gradient: 'sky', component: TopPostSlide, show: wrapped.topPost ? true : false },
+    { type: 'top-post', gradient: 'coral', component: TopPostSlide, show: wrapped.topPost ? true : false },
+    { type: 'interactions', gradient: 'sky', component: InteractionsSlide, show: wrapped.connections.length > 0 ? true : false },
     { type: 'outro', gradient: 'sunset', component: OutroSlide, show: true },
   ] as const);
   let slides = $derived(allSlides.filter((slide) => slide.show));
@@ -36,6 +40,7 @@
     dawn: 'bg-gradient-to-b from-[hsl(206,100%,50%)] via-[hsl(200,90%,55%)] to-[hsl(195,85%,60%)]',
     midnight: 'bg-gradient-to-br from-[hsl(230,40%,20%)] to-[hsl(268,50%,30%)]',
     ocean: 'bg-gradient-to-br from-[hsl(190,85%,40%)] via-[hsl(210,80%,50%)] to-[hsl(240,70%,55%)]',
+    coral: 'bg-gradient-to-br from-[hsl(200,75%,50%)] via-[hsl(280,70%,60%)] to-[hsl(330,80%,65%)]',
   };
 
   let touchStart = $state(0);

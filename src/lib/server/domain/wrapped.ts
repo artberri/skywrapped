@@ -48,4 +48,15 @@ export interface Wrapped {
 		readonly name: string;
 		readonly percentage: number;
 	}[];
+	readonly hashtags: {
+		readonly hashtag: string;
+		readonly count: number;
+	}[];
+	readonly connections: {
+		readonly handle: string;
+		readonly displayName: string;
+		readonly avatar?: string;
+		readonly following: boolean;
+		readonly followsYou: boolean;
+	}[];
 }

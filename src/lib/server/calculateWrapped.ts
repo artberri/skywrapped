@@ -5,6 +5,7 @@ import type {
 	AppBskyEmbedRecord,
 	AppBskyEmbedRecordWithMedia,
 	AppBskyFeedDefs,
+	AppBskyFeedPost,
 } from "@atproto/api";
 import type { Wrapped } from "./domain/wrapped";
 import { getSortAtTimestamp } from "./timestampUtils";
@@ -16,8 +17,8 @@ type ProfileView = AppBskyActorDefs.ProfileView;
 export const calculateWrapped = async ({
 	year,
 	profile,
-	followers: _followers,
-	follows: _follows,
+	followers,
+	follows,
 	feed,
 	likes,
 	bookmarks,
@@ -32,7 +33,11 @@ export const calculateWrapped = async ({
 }): Promise<Wrapped> => {
 	const current = calculateCurrent(profile, feed);
 	const bestTime = calculateBestTime(feed);
-	const { yearActivity, engagement, topPost, languages } = getDataFromFeed(feed, likes, bookmarks);
+	const { yearActivity, engagement, topPost, languages, hashtags, interactions } = getDataFromFeed(
+		feed,
+		likes,
+		bookmarks,
+	);
 
 	return {
 		did: profile.did,
@@ -45,7 +50,50 @@ export const calculateWrapped = async ({
 		engagement,
 		topPost,
 		languages,
+		hashtags,
+		connections: connectionsFromInteractions(profile.handle, interactions, followers, follows),
 	};
+};
+
+const connectionsFromInteractions = (
+	userHandle: string,
+	interactions: Wrapped["connections"],
+	followers: ProfileView[],
+	follows: ProfileView[],
+): Wrapped["connections"] => {
+	const byHandle = interactions.reduce(
+		(acc, interaction) => {
+			if (interaction.handle === userHandle) {
+				return acc;
+			}
+
+			if (acc[interaction.handle]) {
+				acc[interaction.handle].intereactionCount++;
+			} else {
+				acc[interaction.handle] = {
+					connection: {
+						...interaction,
+						following: follows.some((follow) => follow.handle === interaction.handle),
+						followsYou: followers.some((follower) => follower.handle === interaction.handle),
+					},
+					intereactionCount: 1,
+				};
+			}
+			return acc;
+		},
+		{} as Record<
+			string,
+			{
+				connection: Wrapped["connections"][number];
+				intereactionCount: number;
+			}
+		>,
+	);
+
+	return Object.values(byHandle)
+		.sort((a, b) => b.intereactionCount - a.intereactionCount)
+		.slice(0, 5)
+		.map((value) => value.connection);
 };
 
 const calculateCurrent = (
@@ -125,10 +173,20 @@ const calculateBestTime = (feed: FeedViewPost[]): Wrapped["bestTime"] => {
 	};
 };
 
+type EmbedQuote = (AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View) & {
+	record: AppBskyEmbedRecord.ViewRecord;
+};
+
+type QuoteFeedViewPost = FeedViewPost & {
+	post: {
+		embed: EmbedQuote;
+	};
+};
+
 /**
  * Check if a post is a quote (has a record embed containing another post)
  */
-const isQuotePost = (post: FeedViewPost): boolean => {
+const isQuotePost = (post: FeedViewPost): post is QuoteFeedViewPost => {
 	const embed = post.post.embed;
 	if (!embed) {
 		return false;
@@ -210,10 +268,7 @@ const getFirstImage = (
 
 const toTopPost = (post: FeedViewPost): NonNullable<Wrapped["topPost"]> => {
 	// Text is stored in the record property according to Bluesky Lexicon
-	const record =
-		post.post.record.$type === "app.bsky.feed.post"
-			? (post.post.record as { text?: string }).text
-			: "";
+	const record = isRecordPost(post.post.record) ? post.post.record.text : "";
 	const text = record ?? "";
 
 	return {
@@ -252,10 +307,7 @@ const getLanguages = (
 	post: FeedViewPost,
 	languages: Record<string, number>,
 ): Record<string, number> => {
-	const langs =
-		post.post.record.$type === "app.bsky.feed.post"
-			? ((post.post.record as { langs?: string[] }).langs ?? [])
-			: [];
+	const langs = isRecordPost(post.post.record) ? (post.post.record.langs ?? []) : [];
 	if (!langs.length) {
 		languages.all = (languages.all ?? 0) + 1;
 		return languages;
@@ -268,6 +320,26 @@ const getLanguages = (
 	}, languages);
 };
 
+const getHashtags = (post: FeedViewPost): string[] => {
+	if (isRecordPost(post.post.record)) {
+		const features = post.post.record.facets?.flatMap((facet) => facet.features ?? []) ?? [];
+		return features
+			.map((feature) => {
+				if (feature.$type === "app.bsky.richtext.facet#tag" && "tag" in feature) {
+					return feature.tag;
+				}
+				return null;
+			})
+			.filter(isNotNil);
+	}
+
+	return [];
+};
+
+const isRecordPost = (record: FeedViewPost["post"]["record"]): record is AppBskyFeedPost.Main => {
+	return record.$type === "app.bsky.feed.post";
+};
+
 const getDataFromFeed = (
 	feed: FeedViewPost[],
 	likes: FeedViewPost[],
@@ -277,6 +349,8 @@ const getDataFromFeed = (
 	engagement: Wrapped["engagement"];
 	topPost: Wrapped["topPost"];
 	languages: Wrapped["languages"];
+	hashtags: Wrapped["hashtags"];
+	interactions: Wrapped["connections"];
 } => {
 	let posts = feed.length;
 	let replies = 0;
@@ -291,12 +365,34 @@ const getDataFromFeed = (
 
 	let topPost: Wrapped["topPost"];
 	let languagesRecord: Record<string, number> = { all: 0 };
+	let collectedHashtags: [string, number][] = [];
+
+	let interactions: Wrapped["connections"] = [];
 
 	for (const post of feed) {
+		const hashtags = getHashtags(post);
+		for (const hashtag of hashtags) {
+			const hashtagIndex = collectedHashtags.findIndex(
+				([existingHashtag]) => existingHashtag.toLocaleLowerCase() === hashtag.toLocaleLowerCase(),
+			);
+			if (hashtagIndex === -1) {
+				collectedHashtags.push([hashtag, 1]);
+			} else {
+				collectedHashtags[hashtagIndex][1]++;
+			}
+		}
+
 		// Check reposts first (these are not original posts)
 		if (post.reason?.$type === "app.bsky.feed.defs#reasonRepost") {
 			reposts++;
 			posts--;
+			interactions.push({
+				handle: post.post.author.handle,
+				displayName: post.post.author.displayName ?? post.post.author.handle,
+				avatar: post.post.author.avatar ?? "",
+				following: false,
+				followsYou: false,
+			});
 			continue; // Skip further checks for reposts
 		}
 
@@ -304,12 +400,29 @@ const getDataFromFeed = (
 		if (isQuotePost(post)) {
 			quotes++;
 			posts--;
+			interactions.push({
+				handle: post.post.embed.record.author.handle,
+				displayName:
+					post.post.embed.record.author.displayName ?? post.post.embed.record.author.handle,
+				avatar: post.post.embed.record.author.avatar ?? "",
+				following: false,
+				followsYou: false,
+			});
 		}
 
 		// Check replies (only if not already counted as quote)
 		if (post.reply) {
 			replies++;
 			posts--;
+			if ("author" in post.reply.root && "handle" in post.reply.root.author) {
+				interactions.push({
+					handle: post.reply.root.author.handle,
+					displayName: post.reply.root.author.displayName ?? post.reply.root.author.handle,
+					avatar: post.reply.root.author.avatar ?? "",
+					following: false,
+					followsYou: false,
+				});
+			}
 		}
 
 		if (post.post.replyCount && post.post.replyCount > 0) {
@@ -330,6 +443,38 @@ const getDataFromFeed = (
 
 		topPost = getTopPost(post, topPost);
 		languagesRecord = getLanguages(post, languagesRecord);
+	}
+
+	for (const like of likes) {
+		const hashtags = getHashtags(like);
+		for (const hashtag of hashtags) {
+			const hashtagIndex = collectedHashtags.findIndex(
+				([existingHashtag]) => existingHashtag.toLocaleLowerCase() === hashtag.toLocaleLowerCase(),
+			);
+			if (hashtagIndex === -1) {
+				collectedHashtags.push([hashtag, 1]);
+			} else {
+				collectedHashtags[hashtagIndex][1]++;
+			}
+		}
+
+		interactions.push({
+			handle: like.post.author.handle,
+			displayName: like.post.author.displayName ?? like.post.author.handle,
+			avatar: like.post.author.avatar ?? "",
+			following: false,
+			followsYou: false,
+		});
+	}
+
+	for (const bookmark of bookmarks) {
+		interactions.push({
+			handle: bookmark.post.author.handle,
+			displayName: bookmark.post.author.displayName ?? bookmark.post.author.handle,
+			avatar: bookmark.post.author.avatar ?? "",
+			following: false,
+			followsYou: false,
+		});
 	}
 
 	const allWithLanguage = languagesRecord.all;
@@ -363,5 +508,13 @@ const getDataFromFeed = (
 		},
 		topPost,
 		languages: languages,
+		hashtags: collectedHashtags
+			.map(([hashtag, count]) => ({
+				hashtag,
+				count,
+			}))
+			.sort((a, b) => b.count - a.count)
+			.slice(0, 5),
+		interactions: interactions,
 	};
 };
