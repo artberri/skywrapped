@@ -14,6 +14,21 @@
   @reference "tailwindcss";
 </style>
 
+<svelte:head>
+	<title>Sky Wrapped - Your year on Bluesky</title>
+	<meta name="description" content="Get your Bluesky Wrapped! Discover your personalized year in review with top posts, favorite moments, and social stats from your Bluesky activity.">
+	<meta name="keywords" content="skywrapped, wrapped, bluesky">
+	<meta itemprop="name" content="Sky Wrapped - Your year on Bluesky">
+	<meta itemprop="description" content="Get your Bluesky Wrapped! Discover your personalized year in review with top posts, favorite moments, and social stats from your Bluesky activity.">
+	<meta itemprop="image" content="https://skywrapped.app/og.png">
+	<meta itemprop="keywords" content="skywrapped, wrapped, bluesky">
+	<meta property="og:title" content="Sky Wrapped - Your year on Bluesky">
+	<meta property="og:description" content="Get your Bluesky Wrapped! Discover your personalized year in review with top posts, favorite moments, and social stats from your Bluesky activity.">
+	<meta property="og:image" content="https://skywrapped.app/og.png">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="628">
+</svelte:head>
+
 <div class="fixed inset-0 w-full h-full overflow-hidden bg-gradient-to-br from-[hsl(206,100%,50%)] to-[hsl(268,70%,65%)]">
   <div class="absolute top-10 left-10 animate-float">
     <Butterfly size="md" class="text-white/20" />
@@ -29,13 +44,13 @@
   </div>
 
   <div class="relative z-10 flex flex-col items-center justify-center h-full px-4 md:px-8">
-    <div class="max-w-md w-full space-y-6 text-center">
+    <div class="max-w-md w-full space-y-4 text-center">
       <div class="flex justify-center">
         <Butterfly size="lg" class="text-white animate-float" />
       </div>
 
-      <div class="space-y-2">
-        <h1 class="text-5xl md:text-6xl font-bold text-white drop-shadow-lg">
+      <div class="space-y-4">
+        <h1 class="text-5xl md:text-6xl font-extrabold text-white drop-shadow-lg">
           Sky Wrapped
         </h1>
         <p class="text-xl md:text-2xl text-white/90">
@@ -43,7 +58,7 @@
         </p>
       </div>
 
-      <form class="space-y-6 mt-12" method="POST">
+      <form class="space-y-6 mt-8" method="POST">
         <div class="backdrop-blur-lg bg-white/10 rounded-2xl p-8 border border-white/20 shadow-2xl">
           <label for="handle" class="block text-white text-lg font-medium mb-3 text-left">
             Enter your Bluesky handle

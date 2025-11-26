@@ -30,7 +30,7 @@
     <div class="grid grid-cols-2 gap-4 md:gap-6 mt-8 animate-scale-in" style:animation-delay="0.2s">
       <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 space-y-3 hover:bg-white/15 transition-all duration-300">
         <MessageCircle class="w-8 h-8 md:w-10 md:h-10 text-white mx-auto" />
-        <div class="text-3xl md:text-4xl font-bold text-white">
+        <div class="text-3xl md:text-4xl font-bold text-white ">
           {wrapped.current.posts.toLocaleString()}
         </div>
         <p class="text-sm md:text-base text-white/80">Posts</p>

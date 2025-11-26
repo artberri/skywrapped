@@ -33,6 +33,8 @@
 		"@atproto-labs/handle-resolver-node": "^0.1.22",
 		"@atproto/api": "^0.18.3",
 		"@atproto/oauth-client-node": "^0.3.11",
+		"@ethercorps/sveltekit-og": "^4.2.0",
+		"@fontsource/inter": "^5.2.8",
 		"@libsql/client": "^0.15.15",
 		"@lucide/svelte": "^0.555.0",
 		"@prettier/plugin-oxc": "^0.0.5",

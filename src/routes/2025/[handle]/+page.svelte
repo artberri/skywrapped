@@ -88,9 +88,18 @@
   let CurrentSlideComponent = $derived(currentSlideData.component);
 </script>
 
-<style lang="postcss">
-
-</style>
+<svelte:head>
+	<title>{wrapped.displayName}'s year on Bluesky - Sky Wrapped</title>
+	<meta name="description" content="{wrapped.displayName}'s year on Bluesky. You can also get your own Bluesky Wrapped! Discover your personalized year in review with top posts, favorite moments, and social stats from your Bluesky activity.">
+	<meta itemprop="name" content="{wrapped.displayName}'s year on Bluesky - Sky Wrapped">
+	<meta itemprop="description" content="{wrapped.displayName}'s year on Bluesky. You can also get your own Bluesky Wrapped! Discover your personalized year in review with top posts, favorite moments, and social stats from your Bluesky activity.">
+	<meta itemprop="image" content="https://skywrapped.app/2025/{wrapped.handle}/og.png">
+	<meta property="og:title" content="{wrapped.displayName}'s year on Bluesky - Sky Wrapped">
+	<meta property="og:description" content="{wrapped.displayName}'s year on Bluesky. You can also get your own Bluesky Wrapped! Discover your personalized year in review with top posts, favorite moments, and social stats from your Bluesky activity.">
+	<meta property="og:image" content="https://skywrapped.app/2025/{wrapped.handle}/og.png">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="628">
+</svelte:head>
 
 <div class="fixed inset-0 w-full h-full overflow-hidden">
   <div

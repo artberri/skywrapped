@@ -31,6 +31,15 @@
   }
 </style>
 
+<svelte:head>
+	<title>Privacy Policy - Sky Wrapped</title>
+	<meta name="description" content="Privacy Policy for Sky Wrapped">
+	<meta itemprop="name" content="Privacy Policy - Sky Wrapped">
+	<meta itemprop="description" content="Privacy Policy for Sky Wrapped">
+	<meta property="og:title" content="Privacy Policy - Sky Wrapped">
+	<meta property="og:description" content="Privacy Policy for Sky Wrapped">
+</svelte:head>
+
 <div class="w-full h-full overflow-hidden bg-gradient-to-br from-[hsl(206,100%,50%)] to-[hsl(268,70%,65%)]">
   <div class="absolute top-10 left-10 animate-float">
     <Butterfly size="md" class="text-white/20" />
@@ -201,7 +210,7 @@
       <p>If you have any questions about this Privacy Policy or wish to exercise your rights, please contact
         us via email at hello@albertovarela.net.</p>
 
-<h4>This Privacy Policy complies with the EU General Data Protection Regulation (GDPR) and other applicable data protection laws.</h4>
+      <h4>This Privacy Policy complies with the EU General Data Protection Regulation (GDPR) and other applicable data protection laws.</h4>
 
       <div class="text-center w-full text-white/70 text-xs mb-4 pt-12">
         <a href="/terms-of-service" class="text-white/90 hover:text d-white">Terms of Service</a> and <a href="/privacy-policy" class="text-white/90 hover:text d-white">Privacy Policy</a>.

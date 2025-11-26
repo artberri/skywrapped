@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Butterfly from '$lib/components/Butterfly.svelte';
 	import Cloud from '$lib/components/Cloud.svelte';
-	import { MoveLeft } from '@lucide/svelte';
 </script>
 
 <style lang="postcss">
@@ -27,6 +26,15 @@
     @apply text-white/90;
   }
 </style>
+
+<svelte:head>
+	<title>Terms of Service - Sky Wrapped</title>
+	<meta name="description" content="Terms of Service for Sky Wrapped">
+	<meta itemprop="name" content="Terms of Service - Sky Wrapped">
+	<meta itemprop="description" content="Terms of Service for Sky Wrapped">
+	<meta property="og:title" content="Terms of Service - Sky Wrapped">
+	<meta property="og:description" content="Terms of Service for Sky Wrapped">
+</svelte:head>
 
 <div class="w-full h-full overflow-hidden bg-gradient-to-br from-[hsl(206,100%,50%)] to-[hsl(268,70%,65%)]">
   <div class="absolute top-10 left-10 animate-float">

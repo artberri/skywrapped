@@ -159,9 +159,9 @@
   });
 </script>
 
-<style lang="postcss">
-
-</style>
+<svelte:head>
+	<title>Calculating your year on Bluesky - Sky Wrapped</title>
+</svelte:head>
 
 <div class="fixed inset-0 w-full h-full overflow-hidden bg-gradient-to-b from-[hsl(206,100%,50%)] via-[hsl(195,85%,60%)] to-[hsl(50,100%,75%)]">
   <div class="absolute top-20 left-10 animate-float">
