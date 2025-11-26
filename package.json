@@ -7,7 +7,7 @@
 		"dev": "vite dev | pino-pretty --colorize",
 		"build": "vite build",
 		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
+		"prepare": "husky",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"db:start": "turso dev -f local.db -p 8083",
@@ -25,7 +25,8 @@
 		"local:db": "pnpm run db:start",
 		"local:server": "pnpm run dev",
 		"local": "pnpm run --stream \"/^local:.*/\"",
-		"deploy": "netlify deploy --no-build --prod --site skywrapped"
+		"deploy": "netlify deploy --no-build --prod --site skywrapped",
+		"lint-staged": "lint-staged"
 	},
 	"devDependencies": {
 		"@atproto-labs/handle-resolver-node": "^0.1.21",
@@ -44,7 +45,9 @@
 		"drizzle-kit": "^0.31.5",
 		"drizzle-orm": "^0.44.6",
 		"html-to-image": "^1.11.13",
+		"husky": "^9.1.7",
 		"iron-session": "^8.0.4",
+		"lint-staged": "^16.2.7",
 		"netlify-cli": "^23.11.1",
 		"oxfmt": "^0.14.0",
 		"oxlint": "^1.29.0",

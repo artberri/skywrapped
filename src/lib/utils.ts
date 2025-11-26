@@ -81,7 +81,10 @@ function waitForImages(element: HTMLElement): Promise<void> {
  * @param watermarkText - The text to add as watermark
  * @returns A new data URL with the watermark added
  */
-async function addWatermark(imageDataUrl: string, watermarkText: string): Promise<string> {
+async function addWatermark(
+  imageDataUrl: string,
+  watermarkText: string,
+): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
@@ -165,8 +168,13 @@ export async function downloadElementAsImage(
     });
 
     // Replace external image URLs with proxy URLs for CORS bypass
-    const images = Array.from(element.querySelectorAll("img")) as HTMLImageElement[];
-    const imageReplacements: Array<{ img: HTMLImageElement; originalSrc: string }> = [];
+    const images = Array.from(
+      element.querySelectorAll("img"),
+    ) as HTMLImageElement[];
+    const imageReplacements: Array<{
+      img: HTMLImageElement;
+      originalSrc: string;
+    }> = [];
 
     images.forEach((img) => {
       const src = img.src;
@@ -187,7 +195,9 @@ export async function downloadElementAsImage(
       pixelRatio: 2, // Higher quality
       filter: (node) => {
         // Ignore elements with data-ui-overlay attribute
-        return !(node instanceof HTMLElement && node.hasAttribute("data-ui-overlay"));
+        return !(
+          node instanceof HTMLElement && node.hasAttribute("data-ui-overlay")
+        );
       },
     });
 
