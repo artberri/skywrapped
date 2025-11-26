@@ -6,10 +6,7 @@ import { createOAuthClient } from "./auth/client";
 import { BlueskyClient } from "./blueskyClient";
 import { createDb, DrizzleWrappedRepository, type Database } from "./db";
 import type { WrappedRepository } from "./domain/wrappedRepository";
-import {
-  createBidirectionalResolver,
-  type BidirectionalResolver,
-} from "./id-resolver";
+import { createBidirectionalResolver, type BidirectionalResolver } from "./id-resolver";
 
 /**
  * Application state passed to the router and elsewhere

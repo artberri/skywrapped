@@ -20,9 +20,7 @@ export async function createOAuthClient(db: Database) {
   const keyset =
     PUBLIC_BASE_URL && PRIVATE_KEYS
       ? new Keyset(
-          await Promise.all(
-            validJsonWebKeys(PRIVATE_KEYS).map((jwk) => JoseKey.fromJWK(jwk)),
-          ),
+          await Promise.all(validJsonWebKeys(PRIVATE_KEYS).map((jwk) => JoseKey.fromJWK(jwk))),
         )
       : undefined;
 

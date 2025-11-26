@@ -26,10 +26,7 @@ export class StateStore implements NodeSavedStateStore {
       return JSON.parse(result.state) as NodeSavedState;
     } catch (err) {
       const error = ensureError(err);
-      console.error(
-        `[StateStore] Failed to parse state: ${key} - ${error.message}`,
-        error,
-      );
+      console.error(`[StateStore] Failed to parse state: ${key} - ${error.message}`, error);
       return undefined;
     }
   }
@@ -64,10 +61,7 @@ export class SessionStore implements NodeSavedSessionStore {
       return JSON.parse(result.session) as NodeSavedSession;
     } catch (err) {
       const error = ensureError(err);
-      console.error(
-        `[SessionStore] Failed to parse session: ${key} - ${error.message}`,
-        error,
-      );
+      console.error(`[SessionStore] Failed to parse session: ${key} - ${error.message}`, error);
       return undefined;
     }
   }

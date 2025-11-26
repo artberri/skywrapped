@@ -205,10 +205,7 @@ export class BlueskyClient {
 
         // Only collect bookmarks from the target year
         // The bookmark.item contains the PostView
-        if (
-          bookmarkYear === year &&
-          bookmark.item.$type === "app.bsky.feed.defs#postView"
-        ) {
+        if (bookmarkYear === year && bookmark.item.$type === "app.bsky.feed.defs#postView") {
           // Convert BookmarkView to FeedViewPost format
           allBookmarks.push({
             post: bookmark.item as AppBskyFeedDefs.PostView,

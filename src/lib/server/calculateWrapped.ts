@@ -32,11 +32,7 @@ export const calculateWrapped = async ({
 }): Promise<Wrapped> => {
   const current = calculateCurrent(profile, feed);
   const bestTime = calculateBestTime(feed);
-  const { yearActivity, engagement, topPost, languages } = getDataFromFeed(
-    feed,
-    likes,
-    bookmarks,
-  );
+  const { yearActivity, engagement, topPost, languages } = getDataFromFeed(feed, likes, bookmarks);
 
   return {
     did: profile.did,
@@ -231,14 +227,8 @@ const toTopPost = (post: FeedViewPost): NonNullable<Wrapped["topPost"]> => {
   };
 };
 
-const getTopPost = (
-  post: FeedViewPost,
-  currentTop: Wrapped["topPost"],
-): Wrapped["topPost"] => {
-  if (
-    post.reason?.$type === "app.bsky.feed.defs#reasonRepost" ||
-    isQuotePost(post)
-  ) {
+const getTopPost = (post: FeedViewPost, currentTop: Wrapped["topPost"]): Wrapped["topPost"] => {
+  if (post.reason?.$type === "app.bsky.feed.defs#reasonRepost" || isQuotePost(post)) {
     return currentTop;
   }
 

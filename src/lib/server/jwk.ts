@@ -16,8 +16,6 @@ export const validJsonWebKeys = (input: string): PublicJwks => {
     const value = JSON.parse(input);
     return jsonWebKeysSchema.parse(value);
   } catch (error) {
-    throw new Error(
-      `Error parsing PRIVATE_KEYS: "${input}" - ${ensureError(error).message}`,
-    );
+    throw new Error(`Error parsing PRIVATE_KEYS: "${input}" - ${ensureError(error).message}`);
   }
 };

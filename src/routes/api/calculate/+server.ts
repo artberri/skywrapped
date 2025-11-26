@@ -8,9 +8,7 @@ const MIN_STEP_DURATION = 200; // 0.2 seconds in milliseconds
 async function ensureMinDuration(startTime: number): Promise<void> {
   const elapsed = Date.now() - startTime;
   if (elapsed < MIN_STEP_DURATION) {
-    await new Promise((resolve) =>
-      setTimeout(resolve, MIN_STEP_DURATION - elapsed),
-    );
+    await new Promise((resolve) => setTimeout(resolve, MIN_STEP_DURATION - elapsed));
   }
 }
 
@@ -39,11 +37,7 @@ export const GET: RequestHandler = async ({ locals }) => {
     async start(controller) {
       const encoder = new TextEncoder();
 
-      const sendProgress = (
-        step: number,
-        message: string,
-        progress: number,
-      ) => {
+      const sendProgress = (step: number, message: string, progress: number) => {
         const data = JSON.stringify({ step, message, progress });
         controller.enqueue(encoder.encode(`data: ${data}\n\n`));
       };
@@ -116,9 +110,7 @@ export const GET: RequestHandler = async ({ locals }) => {
         // Send completion
         const step9Start = Date.now();
         await ensureMinDuration(step9Start);
-        controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify({ done: true })}\n\n`),
-        );
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ done: true })}\n\n`));
         controller.close();
       } catch (error) {
         ctx.logger.error({ err: error }, "Error during calculation");

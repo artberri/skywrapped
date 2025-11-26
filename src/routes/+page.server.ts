@@ -26,8 +26,7 @@ export const actions: Actions = {
 
     if (!handle) {
       return fail(400, {
-        error:
-          "Please enter a valid Bluesky handle (e.g., @username.bsky.social)",
+        error: "Please enter a valid Bluesky handle (e.g., @username.bsky.social)",
       });
     }
 
@@ -40,13 +39,11 @@ export const actions: Actions = {
       const error = ensureError(err);
       if (error.message.includes("Failed to resolve identity")) {
         return fail(400, {
-          error:
-            "Please enter a valid Bluesky handle (e.g., @username.bsky.social)",
+          error: "Please enter a valid Bluesky handle (e.g., @username.bsky.social)",
         });
       }
 
-      const errorMessage =
-        err instanceof Error ? err.message : "Unexpected error";
+      const errorMessage = err instanceof Error ? err.message : "Unexpected error";
       ctx.logger.warn({ error }, "OAuth authorize failed");
 
       return fail(400, { error: errorMessage });

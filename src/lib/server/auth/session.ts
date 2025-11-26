@@ -5,11 +5,7 @@ import type { AppContext } from "../context";
 
 export type Session = { did?: string };
 
-export async function getSessionAgent(
-  request: Request,
-  response: Response,
-  ctx: AppContext,
-) {
+export async function getSessionAgent(request: Request, response: Response, ctx: AppContext) {
   const session = await getIronSession<Session>(request, response, {
     cookieName: "sid",
     password: COOKIE_SECRET,

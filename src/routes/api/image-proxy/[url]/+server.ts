@@ -31,9 +31,7 @@ const ALLOWED_CONTENT_TYPES = [
  */
 function isAllowedDomain(url: URL): boolean {
   const hostname = url.hostname.toLowerCase();
-  return ALLOWED_DOMAINS.some(
-    (domain) => hostname === domain || hostname.endsWith(`.${domain}`),
-  );
+  return ALLOWED_DOMAINS.some((domain) => hostname === domain || hostname.endsWith(`.${domain}`));
 }
 
 /**
@@ -84,12 +82,7 @@ function isSameOrigin(request: Request, requestUrl: URL): boolean {
  * Only allows proxying images from Bluesky CDN domains for security.
  * Only accessible from the same origin.
  */
-export const GET: RequestHandler = async ({
-  params,
-  fetch,
-  request,
-  url: requestUrl,
-}) => {
+export const GET: RequestHandler = async ({ params, fetch, request, url: requestUrl }) => {
   try {
     // Validate same-origin request
     if (!isSameOrigin(request, requestUrl)) {
@@ -125,10 +118,7 @@ export const GET: RequestHandler = async ({
     });
 
     if (!response.ok) {
-      throw error(
-        response.status,
-        `Failed to fetch image: ${response.statusText}`,
-      );
+      throw error(response.status, `Failed to fetch image: ${response.statusText}`);
     }
 
     // Validate content type before downloading

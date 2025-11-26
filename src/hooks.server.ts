@@ -39,10 +39,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     ctx.logger.debug({ url: url.pathname }, "Auth is required");
     const agent = await getSessionAgent(event.request, new Response(), ctx);
     if (!agent) {
-      ctx.logger.debug(
-        { url: url.pathname },
-        "No agent found, redirecting to home",
-      );
+      ctx.logger.debug({ url: url.pathname }, "No agent found, redirecting to home");
       redirect(302, "/");
     }
     event.locals.agent = agent;

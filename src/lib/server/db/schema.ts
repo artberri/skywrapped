@@ -1,10 +1,4 @@
-import {
-  integer,
-  primaryKey,
-  sqliteTable,
-  text,
-  uniqueIndex,
-} from "drizzle-orm/sqlite-core";
+import { integer, primaryKey, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import type { Wrapped } from "../domain/wrapped";
 
 export const authStateTable = sqliteTable(

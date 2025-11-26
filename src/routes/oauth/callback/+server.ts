@@ -4,12 +4,7 @@ import type { Session } from "$lib/server/auth/session";
 import { getIronSession } from "iron-session";
 import type { RequestHandler } from "./$types";
 
-export const GET: RequestHandler = async ({
-  setHeaders,
-  locals,
-  url,
-  request,
-}) => {
+export const GET: RequestHandler = async ({ setHeaders, locals, url, request }) => {
   const { ctx } = locals;
 
   setHeaders({ "cache-control": "no-store" });

@@ -2,9 +2,7 @@ import type { OAuthClient } from "@atproto/oauth-client-node";
 
 export interface BidirectionalResolver {
   resolveDidToHandle(did: string): Promise<string | undefined>;
-  resolveDidsToHandles(
-    dids: string[],
-  ): Promise<Record<string, string | undefined>>;
+  resolveDidsToHandles(dids: string[]): Promise<Record<string, string | undefined>>;
   resolveHandleToDid(handle: string): Promise<string | undefined>;
 }
 
@@ -23,16 +21,12 @@ export function createBidirectionalResolver({
       }
     },
 
-    async resolveDidsToHandles(
-      dids: string[],
-    ): Promise<Record<string, string | undefined>> {
+    async resolveDidsToHandles(dids: string[]): Promise<Record<string, string | undefined>> {
       const uniqueDids = [...new Set(dids)];
 
       return Object.fromEntries(
         await Promise.all(
-          uniqueDids.map((did) =>
-            this.resolveDidToHandle(did).then((handle) => [did, handle]),
-          ),
+          uniqueDids.map((did) => this.resolveDidToHandle(did).then((handle) => [did, handle])),
         ),
       );
     },
