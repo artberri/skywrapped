@@ -8,8 +8,8 @@
   }
 
   let { wrapped }: PageProps = $props();
-  let isSingleLanguage = $derived(wrapped.languages.length === 1);
-  let primary = $derived(wrapped.languages[0]);
+  let isSingleLanguage = $derived(wrapped.languages.length <= 1);
+  let primary = $derived(wrapped.languages[0] ?? { name: 'English', percentage: 100 });
   let others = $derived(wrapped.languages.slice(1, 3));
 </script>
 

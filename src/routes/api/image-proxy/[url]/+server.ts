@@ -41,7 +41,7 @@ function isAllowedContentType(contentType: string | null): boolean {
 	if (!contentType) {
 		return false;
 	}
-	const normalizedType = contentType.toLowerCase().split(";")[0].trim();
+	const normalizedType = contentType.toLowerCase().split(";")[0]?.trim() ?? "";
 	return ALLOWED_CONTENT_TYPES.includes(normalizedType);
 }
 

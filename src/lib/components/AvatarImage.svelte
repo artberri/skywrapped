@@ -54,6 +54,9 @@
         imgElement?.removeEventListener('error', handleError);
       };
     }
+
+    return () => {
+    };
   });
 </script>
 

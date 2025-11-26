@@ -9,6 +9,7 @@
 	import OutroSlide from "$lib/components/slides/OutroSlide.svelte";
 	import ProfileOverviewSlide from "$lib/components/slides/ProfileOverviewSlide.svelte";
 	import TopPostSlide from "$lib/components/slides/TopPostSlide.svelte";
+	import YourActivityByDaySlide from "$lib/components/slides/YourActivityByDaySlide.svelte";
 	import YourActivitySlide from "$lib/components/slides/YourActivitySlide.svelte";
 	import { cn, downloadElementAsImage } from "$lib/utils";
 	import { ChevronLeft, ChevronRight, Download } from '@lucide/svelte';
@@ -19,30 +20,22 @@
   let { wrapped } = data;
 
   let allSlides = $derived([
-    { type: 'intro', gradient: 'sky', component: IntroSlide, show: true },
-    { type: 'profile-overview', gradient: 'dawn', component: ProfileOverviewSlide, show: true },
-    { type: 'your-activity', gradient: 'sunset', component: YourActivitySlide, show: true },
-    { type: 'languages', gradient: 'ocean', component: LanguagesSlide, show: wrapped.languages.length > 0 ? true : false },
-    { type: 'best-time', gradient: 'midnight', component: BestTimeSlide, show: true },
-    { type: 'hashtags', gradient: 'sunset', component: HashtagsSlide, show: wrapped.hashtags.length > 0 ? true : false },
-    { type: 'engagement', gradient: 'ocean', component: EngagementSlide, show: true },
-    { type: 'top-post', gradient: 'coral', component: TopPostSlide, show: wrapped.topPost ? true : false },
-    { type: 'interactions', gradient: 'sky', component: InteractionsSlide, show: wrapped.connections.length > 0 ? true : false },
-    { type: 'outro', gradient: 'sunset', component: OutroSlide, show: true },
+    { type: 'intro', gradient: 'gradient-sky', component: IntroSlide, show: true },
+    { type: 'profile-overview', gradient: 'gradient-dawn', component: ProfileOverviewSlide, show: true },
+    { type: 'your-activity', gradient: 'gradient-sunset', component: YourActivitySlide, show: true },
+    { type: 'your-activity-by-day', gradient: 'gradient-midnight', component: YourActivityByDaySlide, show: true },
+    { type: 'languages', gradient: 'gradient-dawn', component: LanguagesSlide, show: wrapped.languages.length > 0 ? true : false },
+    { type: 'best-time', gradient: 'gradient-sky', component: BestTimeSlide, show: true },
+    { type: 'hashtags', gradient: 'gradient-coral', component: HashtagsSlide, show: wrapped.hashtags.length > 0 ? true : false },
+    { type: 'engagement', gradient: 'gradient-ocean', component: EngagementSlide, show: true },
+    { type: 'top-post', gradient: 'gradient-midnight', component: TopPostSlide, show: wrapped.topPost ? true : false },
+    { type: 'interactions', gradient: 'gradient-coral', component: InteractionsSlide, show: wrapped.connections.length > 0 ? true : false },
+    { type: 'outro', gradient: 'gradient-sunset', component: OutroSlide, show: true },
   ] as const);
   let slides = $derived(allSlides.filter((slide) => slide.show));
 
   let currentSlide = $state(0);
   let slideContainer: HTMLDivElement | undefined = undefined;
-  let gradientStyles = {
-    sky: 'bg-gradient-to-br from-[hsl(206,100%,50%)] to-[hsl(268,70%,65%)]',
-    sunset: 'bg-gradient-to-b from-[hsl(340,80%,65%)] via-[hsl(268,70%,65%)] to-[hsl(206,100%,50%)]',
-    dawn: 'bg-gradient-to-b from-[hsl(206,100%,50%)] via-[hsl(200,90%,55%)] to-[hsl(195,85%,60%)]',
-    midnight: 'bg-gradient-to-br from-[hsl(230,40%,20%)] to-[hsl(268,50%,30%)]',
-    ocean: 'bg-gradient-to-br from-[hsl(190,85%,40%)] via-[hsl(210,80%,50%)] to-[hsl(240,70%,55%)]',
-    coral: 'bg-gradient-to-br from-[hsl(200,75%,50%)] via-[hsl(280,70%,60%)] to-[hsl(330,80%,65%)]',
-  };
-
   let touchStart = $state(0);
   let touchEnd = $state(0);
 
@@ -59,12 +52,12 @@
   };
 
   let handleTouchStart: TouchEventHandler<HTMLDivElement> = (e) => {
-    touchStart = e.targetTouches[0].clientX;
+    touchStart = e.targetTouches[0]?.clientX ?? 0;
     touchEnd = 0
   };
 
   let handleTouchMove: TouchEventHandler<HTMLDivElement> = (e) => {
-    touchEnd = e.targetTouches[0].clientX;
+    touchEnd = e.targetTouches[0]?.clientX ?? 0;
   };
 
   let handleTouchEnd = () => {
@@ -80,17 +73,17 @@
       }
   };
 
-  let handleDownload = async () => {
+  let currentSlideData = $derived(slides[currentSlide]);
+  let CurrentSlideComponent = $derived(currentSlideData?.component);
+
+  let handleDownload = $derived(async () => {
     if (!slideContainer) {
       return;
     }
 
-    const slideName = `${wrapped.handle}-${currentSlideData.type}-${wrapped.year}`;
+    const slideName = `${wrapped.handle}-${currentSlideData?.type ?? 'unknown'}-${wrapped.year}`;
     await downloadElementAsImage(slideContainer, slideName);
-  };
-
-  let currentSlideData = $derived(slides[currentSlide]);
-  let CurrentSlideComponent = $derived(currentSlideData.component);
+  });
 </script>
 
 <svelte:head>
@@ -111,7 +104,7 @@
     bind:this={slideContainer}
     class={cn(
       "relative w-full h-full transition-all duration-700 ease-in-out",
-      gradientStyles[currentSlideData.gradient]
+      currentSlideData?.gradient ?? 'gradient-sky'
     )}
     ontouchstart={handleTouchStart}
     ontouchmove={handleTouchMove}

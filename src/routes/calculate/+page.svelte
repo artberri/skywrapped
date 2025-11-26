@@ -34,11 +34,11 @@
     const getMessageForProgress = (currentProgress: number): string => {
       // Find the highest threshold that is <= currentProgress
       for (let i = progressMessages.length - 1; i >= 0; i--) {
-        if (currentProgress >= progressMessages[i].threshold) {
-          return progressMessages[i].message;
+        if (currentProgress >= (progressMessages[i]?.threshold ?? 0)) {
+          return progressMessages[i]?.message ?? '';
         }
       }
-      return progressMessages[0].message;
+      return progressMessages[0]?.message ?? '';
     };
 
     // Fallback progress mechanism

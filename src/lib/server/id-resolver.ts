@@ -16,8 +16,10 @@ export function createBidirectionalResolver({
 				if (handle) {
 					return handle;
 				}
+				return undefined;
 			} catch {
 				// Ignore
+				return undefined;
 			}
 		},
 
@@ -37,8 +39,10 @@ export function createBidirectionalResolver({
 				if (did) {
 					return did;
 				}
+				return undefined;
 			} catch {
 				// Ignore
+				return undefined;
 			}
 		},
 	};

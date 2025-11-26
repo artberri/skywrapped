@@ -16,6 +16,7 @@ export interface Wrapped {
 		readonly quotes: number;
 		readonly likes: number;
 		readonly bookmarks: number;
+		readonly byDay: Record<number, number>;
 	};
 	readonly bestTime: {
 		readonly mostActiveDay: number;

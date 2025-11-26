@@ -68,7 +68,7 @@ const connectionsFromInteractions = (
 			}
 
 			if (acc[interaction.handle]) {
-				acc[interaction.handle].intereactionCount++;
+				acc[interaction.handle]!.intereactionCount++;
 			} else {
 				acc[interaction.handle] = {
 					connection: {
@@ -140,14 +140,14 @@ const calculateBestTime = (feed: FeedViewPost[]): Wrapped["bestTime"] => {
 
 	const postingDays = postingDates.reduce(
 		(acc, date) => {
-			acc[date.getDay()]++;
+			acc[date.getDay()] = (acc[date.getDay()] ?? 0) + 1;
 			return acc;
 		},
 		Array.from({ length: 7 }, () => 0),
 	);
 	const postingHours = postingDates.reduce(
 		(acc, date) => {
-			acc[date.getHours()]++;
+			acc[date.getHours()] = (acc[date.getHours()] ?? 0) + 1;
 			return acc;
 		},
 		Array.from({ length: 24 }, () => 0),
@@ -340,6 +340,15 @@ const isRecordPost = (record: FeedViewPost["post"]["record"]): record is AppBsky
 	return record.$type === "app.bsky.feed.post";
 };
 
+const getDayOfYear = (date: Date): number => {
+	// Normalize to midnight to avoid time component issues
+	const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+	const startOfYear = new Date(date.getFullYear(), 0, 0);
+	const diff = normalizedDate.getTime() - startOfYear.getTime();
+	const oneDay = 1000 * 60 * 60 * 24;
+	return Math.floor(diff / oneDay);
+};
+
 const getDataFromFeed = (
 	feed: FeedViewPost[],
 	likes: FeedViewPost[],
@@ -369,7 +378,15 @@ const getDataFromFeed = (
 
 	let interactions: Wrapped["connections"] = [];
 
+	let byDay: Record<number, number> = {};
+
 	for (const post of feed) {
+		const postDate = getSortAtTimestamp(undefined, post.post.indexedAt);
+		if (postDate) {
+			const dayOfYear = getDayOfYear(postDate);
+			byDay[dayOfYear] = (byDay[dayOfYear] ?? 0) + 1;
+		}
+
 		const hashtags = getHashtags(post);
 		for (const hashtag of hashtags) {
 			const hashtagIndex = collectedHashtags.findIndex(
@@ -378,7 +395,7 @@ const getDataFromFeed = (
 			if (hashtagIndex === -1) {
 				collectedHashtags.push([hashtag, 1]);
 			} else {
-				collectedHashtags[hashtagIndex][1]++;
+				collectedHashtags[hashtagIndex]![1]++;
 			}
 		}
 
@@ -446,6 +463,12 @@ const getDataFromFeed = (
 	}
 
 	for (const like of likes) {
+		const postDate = getSortAtTimestamp(undefined, like.feedContext);
+		if (postDate) {
+			const dayOfYear = getDayOfYear(postDate);
+			byDay[dayOfYear] = (byDay[dayOfYear] ?? 0) + 1;
+		}
+
 		const hashtags = getHashtags(like);
 		for (const hashtag of hashtags) {
 			const hashtagIndex = collectedHashtags.findIndex(
@@ -454,7 +477,7 @@ const getDataFromFeed = (
 			if (hashtagIndex === -1) {
 				collectedHashtags.push([hashtag, 1]);
 			} else {
-				collectedHashtags[hashtagIndex][1]++;
+				collectedHashtags[hashtagIndex]![1]++;
 			}
 		}
 
@@ -477,7 +500,7 @@ const getDataFromFeed = (
 		});
 	}
 
-	const allWithLanguage = languagesRecord.all;
+	const allWithLanguage = languagesRecord.all ?? 0;
 	const languageNames = new Intl.DisplayNames(["en"], {
 		type: "language",
 	});
@@ -498,6 +521,7 @@ const getDataFromFeed = (
 			quotes,
 			likes: likes.length,
 			bookmarks: bookmarks.length,
+			byDay,
 		},
 		engagement: {
 			replies: engagementReplies,

@@ -16,11 +16,11 @@
 
 <div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
   <Butterfly class="absolute top-20 right-10 animate-float text-white" size="md" />
-  <Butterfly class="absolute bottom-32 left-10 animate-float-delayed text-white" size="sm" />
+  <Butterfly class="absolute bottom-22 left-10 animate-float-delayed text-white" size="sm" />
 
   <div class="relative z-10 text-center space-y-8 md:space-y-10 max-w-3xl w-full">
     <div class="space-y-4 animate-fade-in">
-      <Users class="w-12 h-12 md:w-16 md:h-16 text-white mx-auto" />
+      <Users class="w-12 h-12 hidden md:block md:w-16 md:h-16 text-white mx-auto" />
       <h2 class="text-3xl md:text-5xl font-bold text-white">
         Your Sky Crew
       </h2>
