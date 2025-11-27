@@ -11,17 +11,18 @@
     wrapped: Wrapped;
   }
 
-  let { wrapped: _ }: PageProps = $props();
+  let { wrapped }: PageProps = $props();
 
   let copied = $state(false);
 
-  const handleShareBluesky = () => {
+  const handleShareBluesky = $derived(() => {
     const shareUrl = window.location.href;
-    const texts = [`Check out my Bluesky Wrapped! 🦋`, `My Bluesky Wrapped just dropped 🦋✨`];
+    const mostInteractions = `Top interactions this year: ${wrapped.connections.slice(0, 3).map(c=>`@${c.handle}`).join(", ")}`;
+    const texts = [`Check out my #BlueskyWrapped 🦋 ${mostInteractions}`, `My #BlueskyWrapped just dropped 🦋 ${mostInteractions}`];
     const text = texts[Math.floor(Math.random() * texts.length)];
     const blueskyShareUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text + " " + shareUrl)}`;
     window.open(blueskyShareUrl, "_blank", "noopener,noreferrer");
-  };
+  });
 
   const handleCopyLink = () => {
     const shareUrl = window.location.href;

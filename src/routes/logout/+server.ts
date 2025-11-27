@@ -1,6 +1,4 @@
-import { COOKIE_SECRET } from "$env/static/private";
-import type { Session } from "$lib/server/auth/session";
-import { getIronSession } from "iron-session";
+import { destroyCredentials } from "$lib/server/auth/session";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ setHeaders, locals, request }) => {
@@ -14,23 +12,7 @@ export const GET: RequestHandler = async ({ setHeaders, locals, request }) => {
 		},
 	});
 
-	const session = await getIronSession<Session>(request, response, {
-		cookieName: "sid",
-		password: COOKIE_SECRET,
-	});
-
-	// Revoke credentials on the server
-	if (session.did) {
-		try {
-			const oauthSession = await ctx.oauthClient.restore(session.did);
-			if (oauthSession) {
-				await oauthSession.signOut();
-			}
-		} catch (err) {
-			ctx.logger.warn({ err }, "Failed to revoke credentials");
-		}
-	}
-
+	const session = await destroyCredentials(request, response, ctx);
 	session.destroy();
 
 	return response;

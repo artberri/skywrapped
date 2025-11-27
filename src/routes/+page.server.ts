@@ -1,5 +1,6 @@
 import { MAX_AGE } from "$lib/server/constants";
-import { ensureError, ifString } from "$lib/utils";
+import { handleErrorSafely } from "$lib/server/errorUtils";
+import { ifString } from "$lib/utils";
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
@@ -36,16 +37,12 @@ export const actions: Actions = {
 			// Initiate the OAuth flow
 			url = await ctx.oauthClient.authorize(sanitizeHandle(handle));
 		} catch (err) {
-			const error = ensureError(err);
-			if (error.message.includes("Failed to resolve identity")) {
-				return fail(400, {
-					error: "Please enter a valid Bluesky handle (e.g., @username.bsky.social)",
-				});
-			}
-
-			const errorMessage = err instanceof Error ? err.message : "Unexpected error";
-			ctx.logger.warn({ error }, "OAuth authorize failed");
-
+			const errorMessage = handleErrorSafely(
+				err,
+				ctx.logger,
+				{ handle },
+				"Please enter a valid Bluesky handle (e.g., @username.bsky.social)",
+			);
 			return fail(400, { error: errorMessage });
 		}
 

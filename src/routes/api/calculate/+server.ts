@@ -1,5 +1,6 @@
 import { calculateWrapped } from "$lib/server/calculateWrapped";
 import { YEAR } from "$lib/server/constants";
+import { handleErrorSafely } from "$lib/server/errorUtils";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
@@ -26,8 +27,9 @@ export const GET: RequestHandler = async ({ locals }) => {
 			throw new Error("No agent found");
 		}
 	} catch (err) {
+		const errorMessage = handleErrorSafely(err, ctx.logger, {}, "Authentication required");
 		ctx.logger.debug({ err }, "Error asserting did during calculate");
-		return json({ error: "Unauthorized" }, { status: 401 });
+		return json({ error: errorMessage }, { status: 401 });
 	}
 
 	const blueskyClient = ctx.getBlueskyClient(agent);
@@ -113,8 +115,13 @@ export const GET: RequestHandler = async ({ locals }) => {
 				controller.enqueue(encoder.encode(`data: ${JSON.stringify({ done: true })}\n\n`));
 				controller.close();
 			} catch (error) {
-				ctx.logger.error({ err: error }, "Error during calculation");
-				const errorData = JSON.stringify({ error: "Calculation failed" });
+				const errorMessage = handleErrorSafely(
+					error,
+					ctx.logger,
+					{ did: actor },
+					"Calculation failed",
+				);
+				const errorData = JSON.stringify({ error: errorMessage });
 				controller.enqueue(encoder.encode(`data: ${errorData}\n\n`));
 				controller.close();
 			}
