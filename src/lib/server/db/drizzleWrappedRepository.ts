@@ -36,4 +36,12 @@ export class DrizzleWrappedRepository implements WrappedRepository {
 			.where(and(eq(wrappedTable.handle, handle), eq(wrappedTable.year, year)));
 		return result?.data ?? undefined;
 	}
+
+	public async getByDidAndYear(did: string, year: number): Promise<Wrapped | undefined> {
+		const [result] = await this.db
+			.select()
+			.from(wrappedTable)
+			.where(and(eq(wrappedTable.did, did), eq(wrappedTable.year, year)));
+		return result?.data ?? undefined;
+	}
 }

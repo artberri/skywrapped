@@ -32,6 +32,17 @@ export const GET: RequestHandler = async ({ locals }) => {
 		return json({ error: errorMessage }, { status: 401 });
 	}
 
+	const existingWrapped = await ctx.wrappedRepository.getByDidAndYear(actor, YEAR);
+	let shouldCalculate = true;
+	if (existingWrapped && existingWrapped.createdAt) {
+		const now = Date.now();
+		const age = now - existingWrapped.createdAt;
+		if (age < 1000 * 60 * 60 * 24) {
+			// 24 hours
+			shouldCalculate = false;
+		}
+	}
+
 	const blueskyClient = ctx.getBlueskyClient(agent);
 
 	// Create a readable stream for Server-Sent Events
@@ -43,6 +54,15 @@ export const GET: RequestHandler = async ({ locals }) => {
 				const data = JSON.stringify({ step, message, progress });
 				controller.enqueue(encoder.encode(`data: ${data}\n\n`));
 			};
+
+			if (!shouldCalculate) {
+				const step0Start = Date.now();
+				sendProgress(0, "Retrieving your existing Wrapped...", 95);
+				await ensureMinDuration(step0Start);
+				controller.enqueue(encoder.encode(`data: ${JSON.stringify({ done: true })}\n\n`));
+				controller.close();
+				return;
+			}
 
 			try {
 				// Step 1: Get feed

@@ -1,4 +1,5 @@
 export interface Wrapped {
+	readonly createdAt: number;
 	readonly did: string;
 	readonly handle: string;
 	readonly year: number;

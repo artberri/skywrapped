@@ -33,7 +33,7 @@ export const getSession = async (request: Request, response: Response) => {
 			httpOnly: true,
 			secure: !dev, // Only use secure cookies in production (HTTPS required)
 			sameSite: "lax", // CSRF protection while allowing OAuth redirects
-			maxAge: 60 * 60 * 24 * 7, // 7 days
+			maxAge: 60 * 60 * 24, // 1 day
 			path: "/",
 		},
 	});

@@ -40,6 +40,7 @@ export const calculateWrapped = async ({
 	);
 
 	return {
+		createdAt: Date.now(),
 		did: profile.did,
 		handle: profile.handle,
 		year,
