@@ -6,6 +6,7 @@
 	import AvatarImage from '../AvatarImage.svelte';
 	import Badge from '../Badge.svelte';
 	import Butterfly from '../Butterfly.svelte';
+	import Slide from '../Slide.svelte';
 
   interface PageProps {
     wrapped: Wrapped;
@@ -14,7 +15,7 @@
   let { wrapped }: PageProps = $props();
 </script>
 
-<div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
+<Slide>
   <Butterfly class="absolute top-20 right-10 animate-float text-white" size="md" />
   <Butterfly class="absolute bottom-22 left-10 animate-float-delayed text-white" size="sm" />
 
@@ -58,4 +59,4 @@
       {/each}
     </div>
   </div>
-</div>
+</Slide>

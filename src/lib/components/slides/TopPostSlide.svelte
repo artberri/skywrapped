@@ -3,6 +3,7 @@
 	import { ExternalLink, Heart, Repeat2 } from '@lucide/svelte';
 	import AspectRatio from '../AspectRatio.svelte';
 	import Butterfly from '../Butterfly.svelte';
+	import Slide from '../Slide.svelte';
 
   interface PageProps {
     wrapped: Wrapped;
@@ -12,7 +13,7 @@
   let topPost = $derived(wrapped.topPost);
 </script>
 
-<div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
+<Slide>
   <Butterfly class="absolute top-12 left-8 text-white/20 animate-float" size="md" />
   <Butterfly class="absolute bottom-16 right-10 text-white/20 animate-float-delayed" size="lg" />
 
@@ -68,4 +69,4 @@
       This post resonated with your community
     </p>
   </div>
-</div>
+</Slide>

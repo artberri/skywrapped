@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Wrapped } from '$lib/server/domain/wrapped';
+	import { Activity } from '@lucide/svelte';
 	import Butterfly from '../Butterfly.svelte';
+	import Slide from '../Slide.svelte';
 
   interface PageProps {
     wrapped: Wrapped;
@@ -40,14 +42,15 @@
 
 </script>
 
-<div class="w-full h-full flex items-center justify-center p-4 md:p-8 overflow-hidden relative">
+<Slide>
   <Butterfly size="lg" class="absolute top-[8%] right-[15%] animate-float text-white/50" />
   <Butterfly size="md" class="absolute bottom-[5%] left-[8%] animate-float text-white/50" style="animation-delay: 0.5s" />
 
   <div class="max-w-6xl w-full space-y-4 md:space-y-8 animate-fade-in pointer-events-auto flex flex-col items-center">
     <div class="text-center space-y-2 md:space-y-3 px-2">
-      <h2 class="text-3xl md:text-6xl font-bold text-white">
-        Every Day Tells a Story 📅
+      <Activity class="w-12 h-12 md:w-16 md:h-16 text-white mx-auto" />
+      <h2 class="text-3xl md:text-5xl font-bold text-white">
+        The Year in Dots
       </h2>
       <p class="text-lg md:text-2xl text-white/90">
         {getActivityMessage(activityRate)}
@@ -77,4 +80,4 @@
       <span>More</span>
     </div>
   </div>
-</div>
+</Slide>

@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@plugin '@tailwindcss/forms';
+@plugin "@tailwindcss/forms";
 
 @tailwind base;
 @tailwind components;
@@ -100,63 +100,6 @@
 		font-family: var(--font-sans);
 	}
 
-	.dark {
-		--background: 230 40% 8%;
-		--foreground: 210 40% 98%;
-
-		--card: 230 40% 12%;
-		--card-foreground: 210 40% 98%;
-
-		--popover: 230 40% 12%;
-		--popover-foreground: 210 40% 98%;
-
-		--primary: 206 100% 60%;
-		--primary-foreground: 0 0% 100%;
-
-		--secondary: 217.2 32.6% 17.5%;
-		--secondary-foreground: 210 40% 98%;
-
-		--muted: 217.2 32.6% 17.5%;
-		--muted-foreground: 215 20.2% 65.1%;
-
-		--accent: 268 70% 70%;
-		--accent-foreground: 0 0% 100%;
-
-		--destructive: 0 62.8% 50.6%;
-		--destructive-foreground: 210 40% 98%;
-
-		--border: 217.2 32.6% 20%;
-		--input: 217.2 32.6% 20%;
-		--ring: 206 100% 60%;
-
-		--gradient-sky: linear-gradient(135deg, hsl(206, 100%, 40%) 0%, hsl(268, 70%, 50%) 100%);
-		--gradient-sunset: linear-gradient(
-			180deg,
-			hsl(340, 70%, 45%) 0%,
-			hsl(268, 60%, 45%) 50%,
-			hsl(206, 90%, 40%) 100%
-		);
-		--gradient-dawn: linear-gradient(
-			180deg,
-			hsl(206, 100%, 50%) 0%,
-			hsl(200, 90%, 55%) 50%,
-			hsl(195, 85%, 60%) 100%
-		);
-		--gradient-ocean: linear-gradient(
-			135deg,
-			hsl(190, 85%, 40%) 0%,
-			hsl(210, 80%, 50%) 50%,
-			hsl(240, 70%, 55%) 100%
-		);
-		--gradient-coral: linear-gradient(
-			135deg,
-			hsl(200, 75%, 50%) 0%,
-			hsl(280, 70%, 60%) 50%,
-			hsl(330, 80%, 65%) 100%
-		);
-		--gradient-midnight: linear-gradient(135deg, hsl(230, 50%, 15%) 0%, hsl(268, 60%, 25%) 100%);
-	}
-
 	a {
 		@apply underline;
 	}
@@ -165,9 +108,13 @@
 		@apply cursor-pointer;
 	}
 
+	p {
+		@apply text-white;
+	}
+
 	h1,
 	h2 {
-		@apply drop-shadow-lg;
+		@apply text-white drop-shadow-lg;
 	}
 }
 

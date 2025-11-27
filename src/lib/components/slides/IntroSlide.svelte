@@ -2,6 +2,7 @@
 	import type { Wrapped } from '$lib/server/domain/wrapped';
 	import Butterfly from '../Butterfly.svelte';
 	import Cloud from '../Cloud.svelte';
+	import Slide from '../Slide.svelte';
 
   interface PageProps {
     wrapped: Wrapped;
@@ -10,7 +11,7 @@
   let { wrapped }: PageProps = $props();
 </script>
 
-<div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
+<Slide>
   <Butterfly class="absolute top-20 left-10 text-white animate-float" size="md" />
   <Butterfly class="absolute top-32 right-16 text-white animate-float-delayed" size="sm" />
   <Butterfly class="absolute bottom-24 left-20 text-white animate-float" size="lg" />
@@ -41,4 +42,4 @@
       Let's look back together
     </p>
   </div>
-</div>
+</Slide>

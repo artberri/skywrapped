@@ -2,6 +2,7 @@
 	import type { Wrapped } from '$lib/server/domain/wrapped';
 	import { Bookmark, Heart, MessageCircle, MessageSquareQuote, Repeat2 } from '@lucide/svelte';
 	import Butterfly from '../Butterfly.svelte';
+	import Slide from '../Slide.svelte';
 
   interface PageProps {
     wrapped: Wrapped;
@@ -10,7 +11,7 @@
   let { wrapped }: PageProps = $props();
 </script>
 
-<div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
+<Slide>
   <Butterfly class="absolute top-12 right-8 text-white animate-float" size="md" />
   <Butterfly class="absolute bottom-16 left-8 text-white animate-float" size="sm" style="animation-delay: 2s" />
 
@@ -76,4 +77,4 @@
       </div>
     </div>
   </div>
-</div>
+</Slide>

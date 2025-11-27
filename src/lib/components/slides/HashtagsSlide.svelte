@@ -2,6 +2,7 @@
 	import type { Wrapped } from '$lib/server/domain/wrapped';
 	import { Hash } from '@lucide/svelte';
 	import Cloud from '../Cloud.svelte';
+	import Slide from '../Slide.svelte';
 
   interface PageProps {
     wrapped: Wrapped;
@@ -10,7 +11,7 @@
   let { wrapped }: PageProps = $props();
 </script>
 
-<div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
+<Slide>
   <Cloud class="absolute top-16 right-0 animate-drift" size="lg" />
   <Cloud class="absolute bottom-20 left-0 animate-drift" size="md" style="animation-delay: 4s" />
 
@@ -41,4 +42,4 @@
       </p>
     </div>
   </div>
-</div>
+</Slide>

@@ -2,6 +2,7 @@
 	import type { Wrapped } from '$lib/server/domain/wrapped';
 	import { Calendar, Clock } from '@lucide/svelte';
 	import Butterfly from '../Butterfly.svelte';
+	import Slide from '../Slide.svelte';
 
   interface PageProps {
     wrapped: Wrapped;
@@ -14,7 +15,7 @@
   let peakPostingHourSuffix = $derived(wrapped.bestTime.peakPostingHour > 12 ? 'PM' : 'AM');
 </script>
 
-<div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
+<Slide>
   <Butterfly class="absolute top-20 right-16 text-white/30 animate-float" size="lg" />
   <Butterfly class="absolute bottom-24 left-12 text-white/30 animate-float-delayed" size="md" />
 
@@ -53,4 +54,4 @@
       A rhythm that suits you
     </p>
   </div>
-</div>
+</Slide>

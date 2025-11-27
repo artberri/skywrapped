@@ -4,8 +4,9 @@
 	import '@fontsource/inter/800.css';
 	import { onMount } from 'svelte';
 	import '../app.css';
+	import type { LayoutProps } from './$types';
 
-	let { children } = $props();
+	let { children }: LayoutProps = $props();
 
 	onMount(() => {
 		const script = document.createElement('script');

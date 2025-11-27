@@ -5,6 +5,7 @@
 	import Butterfly from '../Butterfly.svelte';
 	import Button from '../Button.svelte';
 	import Cloud from '../Cloud.svelte';
+	import Slide from '../Slide.svelte';
 
   interface PageProps {
     wrapped: Wrapped;
@@ -34,7 +35,7 @@
   };
 </script>
 
-<div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
+<Slide>
   <Butterfly class="absolute top-16 left-8 text-white animate-float" size="sm" />
   <Butterfly class="absolute top-24 right-12 text-white animate-float-delayed" size="md" />
   <Butterfly class="absolute bottom-32 left-16 text-white animate-float" size="lg" />
@@ -98,4 +99,4 @@
       </div>
     </div>
   </div>
-</div>
+</Slide>

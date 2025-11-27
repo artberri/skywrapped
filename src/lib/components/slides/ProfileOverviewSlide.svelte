@@ -3,6 +3,7 @@
 	import { Calendar, MessageCircle, UserPlus, Users } from '@lucide/svelte';
 	import Butterfly from '../Butterfly.svelte';
 	import Cloud from '../Cloud.svelte';
+	import Slide from '../Slide.svelte';
 
   interface PageProps {
     wrapped: Wrapped;
@@ -11,7 +12,20 @@
   let { wrapped }: PageProps = $props();
 </script>
 
-<div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
+<style lang="postcss">
+  @reference "tailwindcss";
+  .profile-box {
+    @apply bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 space-y-3 hover:bg-white/15 transition-all duration-300;
+  }
+  .profile-box-value {
+    @apply text-3xl md:text-4xl font-bold text-white;
+  }
+  .profile-box-label {
+    @apply text-sm md:text-base text-white/80;
+  }
+</style>
+
+<Slide>
   <Butterfly class="absolute top-20 left-10 text-white animate-float" size="sm" />
   <Butterfly class="absolute bottom-32 right-16 text-white animate-float-delayed" size="md" />
 
@@ -28,39 +42,39 @@
     </div>
 
     <div class="grid grid-cols-2 gap-4 md:gap-6 mt-8 animate-scale-in" style:animation-delay="0.2s">
-      <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 space-y-3 hover:bg-white/15 transition-all duration-300">
+      <div class="profile-box">
         <MessageCircle class="w-8 h-8 md:w-10 md:h-10 text-white mx-auto" />
-        <div class="text-3xl md:text-4xl font-bold text-white ">
+        <div class="profile-box-value">
           {wrapped.current.posts.toLocaleString()}
         </div>
-        <p class="text-sm md:text-base text-white/80">Posts</p>
+        <p class="profile-box-label">Posts</p>
       </div>
 
-      <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 space-y-3 hover:bg-white/15 transition-all duration-300">
+      <div class="profile-box">
         <Users class="w-8 h-8 md:w-10 md:h-10 text-white mx-auto" />
-        <div class="text-3xl md:text-4xl font-bold text-white">
+        <div class="profile-box-value">
           {wrapped.current.followers.toLocaleString()}
         </div>
-        <p class="text-sm md:text-base text-white/80">Followers</p>
+        <p class="profile-box-label">Followers</p>
       </div>
 
-      <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 space-y-3 hover:bg-white/15 transition-all duration-300">
+      <div class="profile-box">
         <UserPlus class="w-8 h-8 md:w-10 md:h-10 text-white mx-auto" />
-        <div class="text-3xl md:text-4xl font-bold text-white">
+        <div class="profile-box-value">
           {wrapped.current.following.toLocaleString()}
         </div>
-        <p class="text-sm md:text-base text-white/80">Following</p>
+        <p class="profile-box-label">Following</p>
       </div>
 
-      <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 space-y-3 hover:bg-white/15 transition-all duration-300">
+      <div class="profile-box">
         <Calendar class="w-8 h-8 md:w-10 md:h-10 text-white mx-auto" />
-        <div class="text-3xl md:text-4xl font-bold text-white">
+        <div class="profile-box-value">
           {wrapped.current.accountAge}
         </div>
-        <p class="text-sm md:text-base text-white/80">
+        <p class="profile-box-label">
           {wrapped.current.accountAge === 1 ? 'Year' : 'Years'} on Bluesky
         </p>
       </div>
     </div>
   </div>
-</div>
+  </Slide>

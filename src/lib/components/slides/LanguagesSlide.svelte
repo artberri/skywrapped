@@ -2,6 +2,7 @@
 	import type { Wrapped } from '$lib/server/domain/wrapped';
 	import { Languages } from '@lucide/svelte';
 	import Cloud from '../Cloud.svelte';
+	import Slide from '../Slide.svelte';
 
   interface PageProps {
     wrapped: Wrapped;
@@ -13,7 +14,7 @@
   let others = $derived(wrapped.languages.slice(1, 3));
 </script>
 
-<div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
+<Slide>
   <Cloud class="absolute top-8 left-0 animate-drift" size="lg" />
   <Cloud class="absolute bottom-12 right-0 animate-drift" size="md" style="animation-delay: 3s" />
 
@@ -59,4 +60,4 @@
       {/if}
     </div>
   </div>
-</div>
+</Slide>
