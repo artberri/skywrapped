@@ -8,8 +8,8 @@
 
   let progress = $state(0);
   let message = $state("Analyzing your posts...");
-  let {  data }: PageProps = $props();
-  let { handle } = data;
+  let { data }: PageProps = $props();
+  let { handle } = $derived(data);
 
   onMount(async () => {
     let lastDataReceived = Date.now();

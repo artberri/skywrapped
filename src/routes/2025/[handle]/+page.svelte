@@ -17,7 +17,7 @@
 	import type { PageProps } from "./$types";
 
   let { data }: PageProps = $props();
-  let { wrapped } = data;
+  let { wrapped } = $derived(data);
 
   let allSlides = $derived([
     { type: 'intro', gradient: 'gradient-sky', component: IntroSlide, show: true },

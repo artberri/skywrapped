@@ -8,14 +8,14 @@
   }
 
   let { wrapped }: PageProps = $props();
-  let stats = [
+  let stats = $derived([
     { label: "Posts", value: wrapped.yearActivity.posts.toLocaleString(), icon: PenLine },
     { label: "Replies", value: wrapped.yearActivity.replies.toLocaleString(), icon: MessageSquare },
     { label: "Reposts", value: wrapped.yearActivity.reposts.toLocaleString(), icon: Repeat2 },
     { label: "Quotes", value: wrapped.yearActivity.quotes.toLocaleString(), icon: Quote },
     { label: "Likes", value: wrapped.yearActivity.likes.toLocaleString(), icon: Heart },
     { label: "Bookmarks", value: wrapped.yearActivity.bookmarks.toLocaleString(), icon: Bookmark },
-  ];
+  ]);
 </script>
 
 <div class="relative h-full w-full flex flex-col items-center justify-center p-6 md:p-8 overflow-hidden">
