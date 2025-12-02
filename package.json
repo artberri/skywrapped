@@ -48,6 +48,7 @@
 		"clsx": "^2.1.1",
 		"drizzle-kit": "^0.31.5",
 		"drizzle-orm": "^0.44.6",
+		"emoji-regex": "^10.6.0",
 		"html-to-image": "^1.11.13",
 		"husky": "^9.1.7",
 		"iron-session": "^8.0.4",

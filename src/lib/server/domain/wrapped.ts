@@ -54,6 +54,13 @@ export interface Wrapped {
 		readonly hashtag: string;
 		readonly count: number;
 	}[];
+	readonly emojis: {
+		readonly champions: {
+			readonly emoji: string;
+			readonly count: number;
+		}[];
+		readonly total: number;
+	};
 	readonly connections: {
 		readonly handle: string;
 		readonly displayName: string;

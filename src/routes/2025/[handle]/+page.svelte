@@ -1,12 +1,14 @@
 <script lang="ts">
 	import ProgressBar from "$lib/components/ProgressBar.svelte";
 	import BestTimeSlide from "$lib/components/slides/BestTimeSlide.svelte";
+	import EmojisSlide from "$lib/components/slides/EmojisSlide.svelte";
 	import EngagementSlide from "$lib/components/slides/EngagementSlide.svelte";
 	import HashtagsSlide from "$lib/components/slides/HashtagsSlide.svelte";
 	import InteractionsSlide from "$lib/components/slides/InteractionsSlide.svelte";
 	import IntroSlide from "$lib/components/slides/IntroSlide.svelte";
 	import LanguagesSlide from "$lib/components/slides/LanguagesSlide.svelte";
 	import OutroSlide from "$lib/components/slides/OutroSlide.svelte";
+	import PosterTypeSlide from "$lib/components/slides/PosterTypeSlide.svelte";
 	import ProfileOverviewSlide from "$lib/components/slides/ProfileOverviewSlide.svelte";
 	import TopPostSlide from "$lib/components/slides/TopPostSlide.svelte";
 	import YourActivityByDaySlide from "$lib/components/slides/YourActivityByDaySlide.svelte";
@@ -23,10 +25,12 @@
     { type: 'intro', gradient: 'gradient-sky', component: IntroSlide, show: true },
     { type: 'profile-overview', gradient: 'gradient-dawn', component: ProfileOverviewSlide, show: true },
     { type: 'your-activity', gradient: 'gradient-sunset', component: YourActivitySlide, show: true },
+    { type: 'poster-type', gradient: 'gradient-sky', component: PosterTypeSlide, show: true },
     { type: 'best-time', gradient: 'gradient-coral', component: BestTimeSlide, show: true },
     { type: 'your-activity-by-day', gradient: 'gradient-midnight', component: YourActivityByDaySlide, show: true },
     { type: 'languages', gradient: 'gradient-dawn', component: LanguagesSlide, show: wrapped.languages.length > 0 ? true : false },
     { type: 'hashtags', gradient: 'gradient-sky', component: HashtagsSlide, show: wrapped.hashtags.length > 0 ? true : false },
+    { type: 'emojis', gradient: 'gradient-coral', component: EmojisSlide, show: wrapped.emojis.champions.length >= 3 ? true : false },
     { type: 'engagement', gradient: 'gradient-ocean', component: EngagementSlide, show: true },
     { type: 'top-post', gradient: 'gradient-midnight', component: TopPostSlide, show: wrapped.topPost ? true : false },
     { type: 'interactions', gradient: 'gradient-coral', component: InteractionsSlide, show: wrapped.connections.length > 0 ? true : false },

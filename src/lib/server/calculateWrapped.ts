@@ -7,6 +7,7 @@ import type {
 	AppBskyFeedDefs,
 	AppBskyFeedPost,
 } from "@atproto/api";
+import emojiRegex from "emoji-regex";
 import type { Wrapped } from "./domain/wrapped";
 import { getSortAtTimestamp } from "./timestampUtils";
 
@@ -33,11 +34,8 @@ export const calculateWrapped = async ({
 }): Promise<Wrapped> => {
 	const current = calculateCurrent(profile, feed);
 	const bestTime = calculateBestTime(feed);
-	const { yearActivity, engagement, topPost, languages, hashtags, interactions } = getDataFromFeed(
-		feed,
-		likes,
-		bookmarks,
-	);
+	const { yearActivity, engagement, topPost, languages, hashtags, emojis, interactions } =
+		getDataFromFeed(feed, likes, bookmarks);
 
 	return {
 		createdAt: Date.now(),
@@ -52,6 +50,7 @@ export const calculateWrapped = async ({
 		topPost,
 		languages,
 		hashtags,
+		emojis,
 		connections: connectionsFromInteractions(profile.handle, interactions, followers, follows),
 	};
 };
@@ -350,6 +349,17 @@ const getDayOfYear = (date: Date): number => {
 	return Math.floor(diff / oneDay);
 };
 
+const regex = emojiRegex();
+const getPostEmojis = (text: string): string[] => {
+	const matches = text.match(regex);
+	return matches ?? [];
+};
+
+const getPostText = (post: FeedViewPost): string => {
+	const record = isRecordPost(post.post.record) ? post.post.record.text : "";
+	return record ?? "";
+};
+
 const getDataFromFeed = (
 	feed: FeedViewPost[],
 	likes: FeedViewPost[],
@@ -360,6 +370,7 @@ const getDataFromFeed = (
 	topPost: Wrapped["topPost"];
 	languages: Wrapped["languages"];
 	hashtags: Wrapped["hashtags"];
+	emojis: Wrapped["emojis"];
 	interactions: Wrapped["connections"];
 } => {
 	let posts = feed.length;
@@ -376,7 +387,7 @@ const getDataFromFeed = (
 	let topPost: Wrapped["topPost"];
 	let languagesRecord: Record<string, number> = { all: 0 };
 	let collectedHashtags: [string, number][] = [];
-
+	let collectedEmojis: [string, number][] = [];
 	let interactions: Wrapped["connections"] = [];
 
 	let byDay: Record<number, number> = {};
@@ -461,6 +472,18 @@ const getDataFromFeed = (
 
 		topPost = getTopPost(post, topPost);
 		languagesRecord = getLanguages(post, languagesRecord);
+		const text = getPostText(post);
+		const emojis = getPostEmojis(text);
+		for (const emoji of emojis) {
+			const emojiIndex = collectedEmojis.findIndex(
+				([existingEmoji]) => existingEmoji.toLocaleLowerCase() === emoji.toLocaleLowerCase(),
+			);
+			if (emojiIndex === -1) {
+				collectedEmojis.push([emoji, 1]);
+			} else {
+				collectedEmojis[emojiIndex]![1]++;
+			}
+		}
 	}
 
 	for (const like of likes) {
@@ -538,8 +561,18 @@ const getDataFromFeed = (
 				hashtag,
 				count,
 			}))
-			.sort((a, b) => b.count - a.count)
+			.toSorted((a, b) => b.count - a.count)
 			.slice(0, 5),
+		emojis: {
+			total: collectedEmojis.reduce((acc, [_, count]) => acc + count, 0),
+			champions: collectedEmojis
+				.map(([emoji, count]) => ({
+					emoji,
+					count,
+				}))
+				.toSorted((a, b) => b.count - a.count)
+				.slice(0, 5),
+		},
 		interactions: interactions,
 	};
 };

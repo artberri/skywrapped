@@ -10,8 +10,9 @@
 
   let { wrapped }: PageProps = $props();
   const getYearDays = (year: number) => {
+    const today = new Date();
     const startOfYear = new Date(year, 0, 0);
-    const endOfYear = new Date(year, 11, 31);
+    const endOfYear = today < new Date(year, 11, 31) ? today : new Date(year, 11, 31);
     const diff = endOfYear.getTime() - startOfYear.getTime();
     const oneDay = 1000 * 60 * 60 * 24;
     const days = Math.floor(diff / oneDay);
@@ -50,7 +51,7 @@
     <div class="text-center space-y-2 md:space-y-3 px-2">
       <Activity class="w-12 h-12 md:w-16 md:h-16 text-white mx-auto" />
       <h2 class="text-3xl md:text-5xl font-bold text-white">
-        The Year in Dots
+        Activity by Day
       </h2>
       <p class="text-lg md:text-2xl text-white/90">
         {getActivityMessage(activityRate)}
