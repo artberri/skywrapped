@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Wrapped } from '$lib/server/domain/wrapped';
+	import { linkifyText } from '$lib/utils';
 	import { ExternalLink, Heart, Repeat2 } from '@lucide/svelte';
 	import AspectRatio from '../AspectRatio.svelte';
 	import Butterfly from '../Butterfly.svelte';
@@ -11,6 +12,8 @@
 
   let { wrapped }: PageProps = $props();
   let topPost = $derived(wrapped.topPost);
+
+  let linkedText = $derived(topPost?.text ? linkifyText(topPost.text) : '');
 </script>
 
 <Slide>
@@ -36,20 +39,20 @@
       {/if}
 
       <p class="text-lg md:text-2xl text-white leading-relaxed relative pl-8 pr-8 mb-2 mt-2 {topPost?.image ? 'line-clamp-4' : 'line-clamp-8'}">
-        "{topPost?.text}"
+        {@html linkedText}
       </p>
 
       <div class="relative flex items-center justify-start md:justify-center gap-6 md:gap-8 pt-4">
         <div class="flex items-center gap-2">
           <Heart class="w-6 h-6 md:w-8 md:h-8 text-pink-300 fill-pink-300" />
           <span class="text-xl md:text-3xl font-bold text-white">
-            {topPost?.likes.toLocaleString()}
+            {topPost?.likes?.toLocaleString()}
           </span>
         </div>
         <div class="flex items-center gap-2">
           <Repeat2 class="w-6 h-6 md:w-8 md:h-8 text-green-300" />
           <span class="text-xl md:text-3xl font-bold text-white">
-            {topPost?.reposts.toLocaleString()}
+            {topPost?.reposts?.toLocaleString()}
           </span>
         </div>
 

@@ -88,6 +88,14 @@
     const slideName = `${wrapped.handle}-${currentSlideData?.type ?? 'unknown'}-${wrapped.year}`;
     await downloadElementAsImage(slideContainer, slideName);
   });
+
+  let handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'ArrowLeft') {
+      prevSlide();
+    } else if (e.key === 'ArrowRight') {
+      nextSlide();
+    }
+  };
 </script>
 
 <svelte:head>
@@ -102,6 +110,8 @@
 	<meta property="og:image:width" content="1200">
 	<meta property="og:image:height" content="628">
 </svelte:head>
+
+<svelte:window onkeydown={handleKeyDown} />
 
 <div class="fixed inset-0 w-full h-full overflow-hidden">
   <div

@@ -219,3 +219,77 @@ export async function downloadElementAsImage(
 		throw error;
 	}
 }
+
+export function linkifyText(text: string): string {
+	if (!text) {
+		return "";
+	}
+
+	// URL regex pattern - matches http://, https://, and www. URLs
+	// Match URLs before escaping to avoid issues with HTML entities
+	const urlRegex = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi;
+
+	// Split text into parts: URLs and non-URLs
+	const parts: Array<{ type: "url" | "text"; content: string }> = [];
+	let lastIndex = 0;
+	let match: RegExpExecArray | null;
+
+	// Reset regex lastIndex for global regex
+	urlRegex.lastIndex = 0;
+
+	while ((match = urlRegex.exec(text)) !== null) {
+		// Add text before the URL
+		if (match.index > lastIndex) {
+			const textPart = text.slice(lastIndex, match.index);
+			parts.push({ type: "text", content: textPart });
+		}
+
+		// Add the URL
+		parts.push({ type: "url", content: match[0] });
+		lastIndex = match.index + match[0].length;
+	}
+
+	// Add remaining text after last URL
+	if (lastIndex < text.length) {
+		parts.push({ type: "text", content: text.slice(lastIndex) });
+	}
+
+	// If no URLs found, just escape and return the whole text
+	if (parts.length === 0) {
+		return escapeHtml(text);
+	}
+
+	// Build the result: escape text parts, convert URL parts to links
+	return parts
+		.map((part) => {
+			if (part.type === "url") {
+				// Ensure URL has protocol
+				const href = part.content.startsWith("http") ? part.content : `https://${part.content}`;
+				// Escape the URL for display (text content of anchor tag)
+				const displayText = escapeHtml(part.content);
+				// Escape HTML special chars in href attribute (quotes, ampersands)
+				// The browser will handle URL encoding, but we need to escape HTML entities
+				const safeHref = escapeHtmlAttribute(href);
+				return `<a href="${safeHref}" target="_blank" rel="noopener noreferrer" class="pointer-events-auto underline hover:text-white/80 transition-colors">${displayText}</a>`;
+			} else {
+				return escapeHtml(part.content);
+			}
+		})
+		.join("");
+}
+
+function escapeHtml(text: string): string {
+	// Escape & first to avoid double-escaping
+	return text
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
+function escapeHtmlAttribute(value: string): string {
+	// Escape HTML special characters for use in attribute values
+	// Escape & first to avoid double-escaping
+	return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}

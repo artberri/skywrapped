@@ -350,9 +350,97 @@ const getDayOfYear = (date: Date): number => {
 };
 
 const regex = emojiRegex();
+
+/**
+ * Check if an emoji is a non-emotional emoji like color squares, geometric shapes, etc.
+ */
+const isNonEmotionalEmoji = (emoji: string): boolean => {
+	const codePoint = emoji.codePointAt(0);
+	if (!codePoint) {
+		return false;
+	}
+
+	// Color squares: U+1F7E5 to U+1F7EB (🟥🟧🟨🟩🟦🟪🟫)
+	if (codePoint >= 0x1f7e5 && codePoint <= 0x1f7eb) {
+		return true;
+	}
+
+	// Colored circles: U+1F7E0 to U+1F7E4 (🔴🟠🟡🟢🔵)
+	if (codePoint >= 0x1f7e0 && codePoint <= 0x1f7e4) {
+		return true;
+	}
+
+	// Black and white squares: U+2B1B to U+2B1C (⬛⬜)
+	if (codePoint >= 0x2b1b && codePoint <= 0x2b1c) {
+		return true;
+	}
+
+	// Medium squares: U+25FB to U+25FC (◻◼)
+	if (codePoint >= 0x25fb && codePoint <= 0x25fc) {
+		return true;
+	}
+
+	// Black and white circles: U+26AA to U+26AB (⚪⚫)
+	if (codePoint >= 0x26aa && codePoint <= 0x26ab) {
+		return true;
+	}
+
+	// Geometric shapes: triangles, diamonds, etc.
+	// Black small square: U+25AA (▪)
+	// White small square: U+25AB (▫)
+	// Black small diamond: U+25C6 (◆)
+	// White small diamond: U+25C7 (◇)
+	if (
+		codePoint === 0x25aa ||
+		codePoint === 0x25ab ||
+		codePoint === 0x25c6 ||
+		codePoint === 0x25c7
+	) {
+		return true;
+	}
+
+	// Arrows: U+2194 to U+2199, U+21A9, U+2B05 to U+2B07, U+2B50, U+2B55
+	// These are directional symbols, not emotional expressions
+	if (
+		(codePoint >= 0x2194 && codePoint <= 0x2199) ||
+		codePoint === 0x21a9 ||
+		(codePoint >= 0x2b05 && codePoint <= 0x2b07) ||
+		codePoint === 0x2b50 ||
+		codePoint === 0x2b55
+	) {
+		return true;
+	}
+
+	// Keycap sequences (numbers, #, *) - check if emoji starts with these
+	// These are sequences, but we can check for the base character
+	if (emoji.startsWith("#") || emoji.startsWith("*") || /^[0-9]/.test(emoji)) {
+		// Check if it's a keycap sequence (contains U+FE0F U+20E3)
+		if (emoji.includes("\u{FE0F}\u{20E3}") || emoji.includes("\uFE0F\u20E3")) {
+			return true;
+		}
+	}
+
+	// Numbers in circles: U+2460 to U+2473 (①-⑳), U+24F5 to U+24FF (⓵-⓾)
+	// Used for lists/threads, not emotional expression
+	if (
+		(codePoint >= 0x2460 && codePoint <= 0x2473) ||
+		(codePoint >= 0x24f5 && codePoint <= 0x24ff)
+	) {
+		return true;
+	}
+
+	return false;
+};
+
 const getPostEmojis = (text: string): string[] => {
 	const matches = text.match(regex);
-	return matches ?? [];
+
+	if (!matches) {
+		return [];
+	}
+
+	// Filter out non-emotional emojis like color squares
+	return matches.filter((emoji) => !isNonEmotionalEmoji(emoji));
 };
 
 const getPostText = (post: FeedViewPost): string => {
